@@ -1,5 +1,6 @@
 import { Box, Container, Flex, Image, VStack } from "@chakra-ui/react"
-import AuthenticationForm from "./Components/AuthenticationForm/AuthenticationForm"
+import AuthenticationForm from "../../Components/AuthenticationForm/AuthenticationForm"
+
 
 
 const Auth = () => {

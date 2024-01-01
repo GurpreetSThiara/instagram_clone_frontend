@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react"
 import { useState } from "react"
-import { CommentLogo, NotificationsLogo, UnlikeLogo } from "../../../../../assets/constants";
+import { CommentLogo,NotificationsLogo, UnlikeLogo } from "../../assets/constants";
 
 
 const PostFooter = ({username}) => {

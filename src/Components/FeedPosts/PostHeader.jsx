@@ -1,4 +1,4 @@
-import { Avatar, Box, Container, Flex, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 
 
 const PostHeader = ({username,avatar}) => {
