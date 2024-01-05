@@ -2,6 +2,7 @@ import  { useEffect, useState } from 'react';
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   Link,
   Tooltip,
@@ -17,8 +18,10 @@ import {
 } from '../../assets/constants';
 import { AiFillHome } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
+import useLogOut from '../../hooks/useLogOut';
 
 const Sidebar = () => {
+  const {handleLogOut,isLoggingOut}=useLogOut();
   const SidebarItems = [
     {
       icon: <AiFillHome size={25} />,
@@ -157,11 +160,8 @@ const Sidebar = () => {
                 <Box display={{ base: 'none', md: 'block' }}>{item.text}</Box>
               </Link>
             ))}
-            <Link
-              mt={'auto'}
-              to={'/auth'}
-              as={RouterLink}
-              display={'flex'}
+            <Flex
+            onClick={handleLogOut}
               alignItems={'center'}
               gap={4}
               _hover={{ bd: 'whiteAlpha.400' }}
@@ -171,8 +171,8 @@ const Sidebar = () => {
               justifyContent={{ base: 'center', md: 'flex-start' }}
             >
               <BiLogOut />
-              <Box display={{ base: 'none', md: 'block' }}>Logout</Box>
-            </Link>
+              <Button variant={"ghost"} _hover={{bg:"transparent"}} display={{ base: 'none', md: 'block' }}>Logout</Button>
+            </Flex>
           </Flex>
         )}
       </Flex>
