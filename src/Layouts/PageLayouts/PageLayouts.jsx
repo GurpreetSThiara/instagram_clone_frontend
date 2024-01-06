@@ -2,6 +2,8 @@ import { Box, Flex } from "@chakra-ui/react";
 import Sidebar from "../../pages/Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../Firebase/Firebase";
 
 const PageLayouts = ({ children }) => {
   
@@ -20,10 +22,12 @@ const PageLayouts = ({ children }) => {
   }, []);
 
   const pathName = useLocation();
+  const [user,loading,error] = useAuthState(auth);
+  const canRenderSidebar= user && pathName !== "/auth"  ; 
   return (
     !isMobile?
     <Flex>
-      {pathName !== "/auth" ? (
+      {canRenderSidebar? (
         <Box w={{ base: "70px", md: "240px" }}>
           <Sidebar />
         </Box>

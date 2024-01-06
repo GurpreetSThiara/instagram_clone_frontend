@@ -1,8 +1,9 @@
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../Firebase/Firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
+import { useRef } from "react";
 
 const useSignUpWithEmailAndPassword = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
@@ -15,6 +16,16 @@ const signUp = async (input) => {
         showToast("Error","Please fill all the feilds","error");
         return;
     }
+    const userRef = collection(firestore,"users");
+    const q = query(userRef, where("username", "==", input.username));
+
+    const querySnapshot = await getDocs(q);
+
+    if(!querySnapshot.empty){
+        showToast("Error","Username Already Exist","error");
+        return;
+    }
+
     try{
        const newUser =await createUserWithEmailAndPassword(input.email,input.password);
        if(!newUser && error){
@@ -34,7 +45,7 @@ const signUp = async (input) => {
             posts:[],
             createdAt:Date.now()
         }
-        await setDoc(doc(firestore,"users",newUser.user.uid,userDoc));
+        await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
         localStorage.setItem("instaUser",JSON.stringify(userDoc));
         loginUser(userDoc);
         
