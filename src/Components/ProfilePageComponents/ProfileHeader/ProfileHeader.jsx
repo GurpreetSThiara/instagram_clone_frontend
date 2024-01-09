@@ -11,10 +11,11 @@ import {
   VStack,
   useMediaQuery,
 } from '@chakra-ui/react';
+import useUserProfileStore from '../../../store/userProfileStore';
 
-const ProfileImage = () => (
+const ProfileImage = ({image}) => (
   <AvatarGroup justifyContent={{base:"flex-end",sm:"center"}} alignSelf="flex-end" marginRight="16px">
-    <Avatar height={{ base: 77, sm: 166 }} width={{ base: 77, sm: 166 }} src="src/public/profilepic.png" />
+    <Avatar height={{ base: 77, sm: 166 }} width={{ base: 77, sm: 166 }} src={image} />
   </AvatarGroup>
 );
 
@@ -57,6 +58,7 @@ const ProfileUpperPart = ({ username }) => (
 );
 
 const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
+  const {userProfile} = useUserProfileStore()
   const [isLargerThanSm] = useMediaQuery('(min-width: 48em)');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -74,7 +76,7 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
 
   const isLargeScreen = windowWidth > 700;
 
-  const ProfileLowerPart=({username, numberOfPosts, followers, following})=>{
+  const ProfileLowerPart=({username, numberOfPosts, followers, following , fullName,bio})=>{
     const ProfileStatistics =()=>{
       return <Container my={{base:2,md:0}} borderTop={!isLargeScreen?"1px solid":""} borderBottom={!isLargeScreen?"1px solid":""} borderColor={"whiteAlpha.300"}  >
 
@@ -111,13 +113,13 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
         
       <Flex alignItems="center" gap={4}>
         <Text fontSize="sm" fontWeight="bold">
-          Profile Name
+          {fullName}
         </Text>
       </Flex>
       <Button color="#E9F5F5" _hover={{ bg: '#363636' }} borderRadius={15} height={26} display="flex" alignItems="center">
         @<Text fontSize={13}>{username}</Text>
       </Button>
-      <Text fontSize="sm">Profile description goes here</Text>
+      <Text fontSize="sm">{bio}</Text>
       {!isLargeScreen? <ProfileStatistics/>:null}
     </Box>
   }
@@ -127,19 +129,19 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
     <Box gap={{ base: 4, sm: 20 }}  alignSelf={{base:"center",sm:"auto"}}>
       {isLargeScreen ? (
         <Flex gap={{ base: 4, sm: 20 }} py={8} direction={{ base: 'column', sm: 'row' }} alignSelf="auto">
-          <ProfileImage />
+          <ProfileImage image={userProfile.profilePicURL} />
            <Box>
-           <ProfileUpperPart username={username}  />
-          <ProfileLowerPart username={username} numberOfPosts={numberOfPosts} followers={followers} following={following}/>
+           <ProfileUpperPart username={userProfile.username}  />
+          <ProfileLowerPart username={userProfile.username}  numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
            </Box>
         </Flex>
       ) : (
        <>
         <Flex>
           <ProfileImage />
-          <ProfileUpperPart username={username}  />
+          <ProfileUpperPart username={userProfile.username}  />
         </Flex>
-        <ProfileLowerPart username={username} numberOfPosts={numberOfPosts} followers={followers} following={following}/>
+        <ProfileLowerPart username={userProfile.username} numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
 
        </>
       )}
