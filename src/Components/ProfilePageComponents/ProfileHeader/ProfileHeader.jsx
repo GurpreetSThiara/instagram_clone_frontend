@@ -9,9 +9,12 @@ import {
   Flex,
   Text,
   VStack,
+  useDisclosure,
   useMediaQuery,
 } from '@chakra-ui/react';
 import useUserProfileStore from '../../../store/userProfileStore';
+import useAuthStore from './../../../store/authStore';
+import EditProfile from '../EditProfile/EditProfile';
 
 const ProfileImage = ({image}) => (
   <AvatarGroup justifyContent={{base:"flex-end",sm:"center"}} alignSelf="flex-end" marginRight="16px">
@@ -20,38 +23,42 @@ const ProfileImage = ({image}) => (
 );
 
 
-const ProfileUpperPart = ({ username }) => (
+const ProfileUpperPart = ({ username , vistingOwnProfile,vistingAnotherProfile,onOpen }) => (
   <VStack alignItems="flex-start" gap={2}  flex={1}>
     <Flex gap={4} direction={{ base: 'column', sm: 'row' }} justifyContent={{ base: 'flex-start', sm: 'flex-start' }} alignItems={{ base: 'flex-start', sm: 'center' }} w="full">
       <Text fontSize={25}>{username}</Text>
-      <Flex gap={4} alignItems="center" justifyContent="center">
-        <Button
-          width={{base:250,sm:101.45}}
-          height={32}
-          bg="#4A4A4A"
-          color="#E9F5F5"
-          _hover={{ bg: '#363636' }}
-          size={{ base: 'sm', md: 'sm' }}
-          justifyContent="center"
-        >
-          Edit Profile
-        </Button>
-       
-      </Flex>
-      <Flex gap={4} alignItems="center" justifyContent="center">
-        <Button
-          width={{base:250,sm:101.45}}
-          height={32}
-          bg="#4A4A4A"
-          color="#E9F5F5"
-          _hover={{ bg: '#363636' }}
-          size={{ base: 'sm', md: 'sm' }}
-          justifyContent="center"
-        >
-          ads tools
-        </Button>
-       
-      </Flex>
+        { vistingOwnProfile && (
+                <Flex gap={4} alignItems="center" justifyContent="center">
+                <Button
+                  width={{base:250,sm:101.45}}
+                  height={32}
+                  bg="#4A4A4A"
+                  color="#E9F5F5"
+                  _hover={{ bg: '#363636' }}
+                  size={{ base: 'sm', md: 'sm' }}
+                  justifyContent="center"
+                  onClick={onOpen}
+                >
+                  Edit Profile
+                </Button>
+               
+              </Flex>
+             
+        )}
+        {vistingAnotherProfile &&   <Flex gap={4} alignItems="center" justifyContent="center">
+                <Button
+                  width={{base:250,sm:101.45}}
+                  height={32}
+                  bg="#4A4A4A"
+                  color="#E9F5F5"
+                  _hover={{ bg: '#363636' }}
+                  size={{ base: 'sm', md: 'sm' }}
+                  justifyContent="center"
+                >
+                  Follow
+                </Button>
+               
+              </Flex>}
     </Flex>
 
   </VStack>
@@ -61,6 +68,11 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
   const {userProfile} = useUserProfileStore()
   const [isLargerThanSm] = useMediaQuery('(min-width: 48em)');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const authUser = useAuthStore(state =>state.user);
+  const vistingOwnProfile = authUser && authUser.username === userProfile.username;
+  const vistingAnotherProfile = authUser && authUser.username !== userProfile.username;
+
+  const {isOpen , onOpen , onClose} = useDisclosure();
 
   useEffect(() => {
     const handleResize = () => {
@@ -129,9 +141,9 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
     <Box gap={{ base: 4, sm: 20 }}  alignSelf={{base:"center",sm:"auto"}}>
       {isLargeScreen ? (
         <Flex gap={{ base: 4, sm: 20 }} py={8} direction={{ base: 'column', sm: 'row' }} alignSelf="auto">
-          <ProfileImage image={userProfile.profilePicURL} />
+          <ProfileImage image={userProfile.profilePicUrl} />
            <Box>
-           <ProfileUpperPart username={userProfile.username}  />
+           <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile}   vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} />
           <ProfileLowerPart username={userProfile.username}  numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
            </Box>
         </Flex>
@@ -139,12 +151,14 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
        <>
         <Flex>
           <ProfileImage />
-          <ProfileUpperPart username={userProfile.username}  />
+          <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile} vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} />
         </Flex>
         <ProfileLowerPart username={userProfile.username} numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
 
        </>
       )}
+
+      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose}/>}
     </Box>
   );
 };
