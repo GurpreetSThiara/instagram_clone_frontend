@@ -22,6 +22,7 @@ import useLogOut from '../../hooks/useLogOut';
 
 const Sidebar = () => {
   const {handleLogOut,isLoggingOut}=useLogOut();
+  const [shrinkedSideBar , setShrinkedSidebar] = useState(false);
   const SidebarItems = [
     {
       icon: <AiFillHome size={25} />,
@@ -31,7 +32,7 @@ const Sidebar = () => {
     {
       icon: <SearchLogo />,
       text: 'Search',
-      link: '/',
+      onClick:()=>{setShrinkedSidebar(!shrinkedSideBar)}
     },
     {
       icon: <NotificationsLogo />,
@@ -78,7 +79,7 @@ const Sidebar = () => {
     >
       <Flex direction={'column'} gap={10} w={'full'} h={'full'}>
         <Link to={'/'} as={RouterLink} pl={2} display={{ base: 'none', md: 'block' }} cursor={'pointer'}>
-          <InstagramLogo />
+          {shrinkedSideBar?<InstagramMobileLogo/>:<InstagramLogo />}
         </Link>
         <Link
           to={'/'}
@@ -93,7 +94,7 @@ const Sidebar = () => {
           <InstagramMobileLogo />
         </Link>
         {isMobile ? (
-          <Flex direction={'row'} gap={5} cursor={'pointer'}>
+          <Flex direction={'row'} gap={5} cursor={'pointer'} >
             {SidebarItems.map((item, index) => (
               <Tooltip
                 key={index}
@@ -143,7 +144,9 @@ const Sidebar = () => {
           <Flex direction={'column'} gap={5} cursor={'pointer'}>
             {/* Large screen (desktop) sidebar content */}
             {SidebarItems.map((item, index) => (
+              
               <Link
+              onClick={item.onClick}
                 key={index}
                 to={item.link || null}
                 as={RouterLink}
@@ -157,7 +160,7 @@ const Sidebar = () => {
                 justifyContent={{ base: 'center', md: 'flex-start' }}
               >
                 {item.icon}
-                <Box display={{ base: 'none', md: 'block' }}>{item.text}</Box>
+              {!shrinkedSideBar?<Box display={{ base: 'none', md: 'block' }}>{item.text}</Box>:<></>} 
               </Link>
             ))}
             <Flex

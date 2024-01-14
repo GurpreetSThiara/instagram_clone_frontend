@@ -15,6 +15,7 @@ import {
 import useUserProfileStore from '../../../store/userProfileStore';
 import useAuthStore from './../../../store/authStore';
 import EditProfile from '../EditProfile/EditProfile';
+import useFollowUser from '../../../hooks/useFollowUser';
 
 const ProfileImage = ({image}) => (
   <AvatarGroup justifyContent={{base:"flex-end",sm:"center"}} alignSelf="flex-end" marginRight="16px">
@@ -23,7 +24,7 @@ const ProfileImage = ({image}) => (
 );
 
 
-const ProfileUpperPart = ({ username , vistingOwnProfile,vistingAnotherProfile,onOpen }) => (
+const ProfileUpperPart = ({ username , vistingOwnProfile,vistingAnotherProfile,onOpen,handleFollowUser , isUpdating , isFollowing }) => (
   <VStack alignItems="flex-start" gap={2}  flex={1}>
     <Flex gap={4} direction={{ base: 'column', sm: 'row' }} justifyContent={{ base: 'flex-start', sm: 'flex-start' }} alignItems={{ base: 'flex-start', sm: 'center' }} w="full">
       <Text fontSize={25}>{username}</Text>
@@ -54,8 +55,10 @@ const ProfileUpperPart = ({ username , vistingOwnProfile,vistingAnotherProfile,o
                   _hover={{ bg: '#363636' }}
                   size={{ base: 'sm', md: 'sm' }}
                   justifyContent="center"
+                  onClick={handleFollowUser}
+                  isLoading={isUpdating}
                 >
-                  Follow
+                  {isFollowing?"Unfollow":"Follow"}
                 </Button>
                
               </Flex>}
@@ -66,11 +69,12 @@ const ProfileUpperPart = ({ username , vistingOwnProfile,vistingAnotherProfile,o
 
 const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
   const {userProfile} = useUserProfileStore()
-  const [isLargerThanSm] = useMediaQuery('(min-width: 48em)');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const authUser = useAuthStore(state =>state.user);
   const vistingOwnProfile = authUser && authUser.username === userProfile.username;
   const vistingAnotherProfile = authUser && authUser.username !== userProfile.username;
+  const {isFollpwing , handleFollowUser , isUpdating} = useFollowUser(userProfile?.uid)
+
 
   const {isOpen , onOpen , onClose} = useDisclosure();
 
@@ -143,7 +147,7 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
         <Flex gap={{ base: 4, sm: 20 }} py={8} direction={{ base: 'column', sm: 'row' }} alignSelf="auto">
           <ProfileImage image={userProfile.profilePicUrl} />
            <Box>
-           <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile}   vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} />
+           <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile}   vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} handleFollowUser={handleFollowUser} isUpdating={isUpdating} isFollowing={isFollpwing} />
           <ProfileLowerPart username={userProfile.username}  numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
            </Box>
         </Flex>
@@ -151,7 +155,7 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
        <>
         <Flex>
           <ProfileImage />
-          <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile} vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} />
+          <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile} vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen} handleFollowUser={handleFollowUser} isUpdating={isUpdating} isFollowing={isFollpwing} />
         </Flex>
         <ProfileLowerPart username={userProfile.username} numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
 
