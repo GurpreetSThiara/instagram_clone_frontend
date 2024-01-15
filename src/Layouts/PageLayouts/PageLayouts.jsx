@@ -26,13 +26,13 @@ const PageLayouts = ({ children }) => {
   const canRenderSidebar= user && pathName !== "/auth"  ; 
   return (
     !isMobile?
-    <Flex>
+    <Flex position={'relative'}>
       {canRenderSidebar? (
-        <Box w={{ base: "70px", md: "240px" }}>
+        <Box position="fixed" zIndex={2} >
           <Sidebar />
         </Box>
       ) : null}
-      <Box flex={1} w={{base:"calc(100% - 70px)" , md:"calc(100% - 240px)"}}  >{children}</Box>
+      <Box  overflowY="auto" position={'absolute'} ml={{base:"70px",md:"240px"}} zIndex={1} flex={1} w={{base:"calc(100% - 70px)" , md:"calc(100% - 240px)"}}  >{children}</Box>
     </Flex>:
 
 
