@@ -2,7 +2,7 @@
 import { Avatar, Box, Button, Card, Container, Flex , Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
 import FeedPosts from '../Components/FeedPosts/FeedPosts'
 import SuggestedUsers from '../Components/SuggestedUsers/SuggestedUsers'
-import HomePageHeader from '../Components/HomePageHeader/HomePageHeader'
+
 import { useEffect, useRef, useState } from 'react'
 import { SearchIcon } from '@chakra-ui/icons'
 import { InstagramMobileLogo } from '../assets/constants'

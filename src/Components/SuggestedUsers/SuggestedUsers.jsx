@@ -3,8 +3,11 @@ import { Box, Flex, Link, Text, VStack } from '@chakra-ui/react'
 import SuggestedUsersHeader from './SuggestedUsersHeader'
 import SuggestedUser from './SuggestedUser'
 import { Link as RouterLink } from 'react-router-dom'
+import useGetSuggestedUsers from '../../hooks/useGetSuggestedUsers'
 
 const SuggestedUsers = () => {
+    const {isLoading, suggestedUsers} = useGetSuggestedUsers();
+    if(isLoading) return null;
   return (
     <VStack py={8} px={8} gap={4}>
         <SuggestedUsersHeader/>
@@ -17,9 +20,7 @@ const SuggestedUsers = () => {
             </Text>
         </Flex>
 
-        <SuggestedUser name="ponty chadda" followers={1111} avatar="https://sp-images.summitpost.org/1038746.jpg?auto=format&fit=max&ixlib=php-2.1.1&q=35&w=1024&s=394ed8f3158db7ef966a1b238d293e8b" />
-        <SuggestedUser name="monty laal" followers={1411} avatar="https://media.licdn.com/dms/image/C4E03AQFpjaGTSSuRaw/profile-displayphoto-shrink_800_800/0/1598945509781?e=2147483647&v=beta&t=-BPJg7Sms8RTT_geWZ6pJ6-D6FRtTUfm9VHPzBIrwII" />
-        <SuggestedUser name="shanty kumar" followers={4111} avatar="https://i1.rgstatic.net/ii/profile.image/599086382186502-1519844732695_Q512/Jan-Louda.jpg" />
+       {suggestedUsers.map((user , index)=>(<SuggestedUser user={user} key={index}/>))}
 
 
         <Box fontSize={12} color={"gray.500"} mt={5} alignSelf={"start"}>

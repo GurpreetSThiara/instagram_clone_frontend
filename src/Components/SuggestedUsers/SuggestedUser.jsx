@@ -1,18 +1,23 @@
 import { Avatar, Box, Button, Flex, VStack } from "@chakra-ui/react";
 import  { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useFollowUser from "../../hooks/useFollowUser";
 
-const SuggestedUser = ({ followers, name, avatar }) => {
+const SuggestedUser = ( {user} ) => {
+  const navigate = useNavigate();
+  const {isFollowing , handleFollowUser , isUpdating} = useFollowUser(user.uid);
+
   const [isFollowed, setIsFollowed] = useState(false);
   return (
-    <Flex justify={"space-between"} alignItems={"center"} w={"full"}>
+    <Flex justify={"space-between"} alignItems={"center"} w={"full"} onClick={()=>navigate(`/${user.username}`)} cursor={'pointer'} >
       <Flex alignItems={"center"} gap={2}>
-        <Avatar src={avatar} name={name} size={"md"} />
+        <Avatar src={user.profilePicUrl}  size={"md"} />
         <VStack spacing={2} alignItems={"flex-start"}>
           <Box fontSize={12} fontWeight={"bold"}>
-            {name}
+            {user.username}
           </Box>
           <Box fontSize={11} color={"gray.500"}>
-            {followers} followers
+            {user?.followers?.length} followers
           </Box>
         </VStack>
       </Flex>
@@ -25,11 +30,12 @@ const SuggestedUser = ({ followers, name, avatar }) => {
         color={"blue.400"}
         cursor={"pointer"}
         _hover={{ color: "white" }}
-        onClick={() => {
-          setIsFollowed(!isFollowed);
-        }}
+        onClick={handleFollowUser}
+        isLoading={isUpdating}
+        
+         
       >
-        {isFollowed ? "Unfollow" : "Follow"}
+        {isFollowing?"Unfollow":"Follow"}
       </Button>
     </Flex>
   );
