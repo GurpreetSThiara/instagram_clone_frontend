@@ -1,12 +1,19 @@
-import { Box, Link } from '@chakra-ui/react';
+import { Box, Link, useDisclosure } from '@chakra-ui/react';
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { CreatePostLogo } from '../../../assets/constants';
 
+import CreateModal from './CreateModal/CreateModal';
+
+
 const Create = ({shrinkedSideBar}) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+  
   return (
+    <>
     <Link
-    onClick={()=>{}}
+    onClick={onOpen}
    
     to={'/'}
     as={RouterLink}
@@ -23,31 +30,19 @@ const Create = ({shrinkedSideBar}) => {
         base: "center",
         md: shrinkedSideBar ? "center" : "flex-start",
       }}
-    //   onClick={() => setSelectedItem(index)}
-    //   borderWidth={
-    //     shrinkedSideBar
-    //       ? selectedItem === index
-    //         ? "1px"
-    //         : "0px"
-    //       : null
-    //   }
-    //   borderColor={
-    //     shrinkedSideBar
-    //       ? selectedItem === index
-    //         ? "white"
-    //         : "transparent"
-    //       : null
-    //   }
+
       _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
     >
       {<CreatePostLogo/>}
       {!shrinkedSideBar ? (
         <Box display={{ base: "none", md: "block" }}>
-          Home
+          Create
         </Box>
       ) : null}
     </Box>
   </Link>
+  <CreateModal isOpen={isOpen} onClose={onClose}/>
+  </>
   )
 }
 

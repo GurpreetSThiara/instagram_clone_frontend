@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Link,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Link, Tooltip } from "@chakra-ui/react";
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   CreatePostLogo,
   InstagramLogo,
@@ -25,9 +12,7 @@ import {
 import { AiFillHome } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import useLogOut from "../../hooks/useLogOut";
-import { CloseIcon } from "@chakra-ui/icons";
-import useSearchUsers from "../../hooks/useSearchUsers";
-import searchResultsStore from "../../store/searchResultsStore";
+
 import Create from "./SidebarItems/Create";
 import Home from "./SidebarItems/Home";
 import Notifications from "./SidebarItems/Notifications";
@@ -78,7 +63,6 @@ const Sidebar = () => {
   ];
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,7 +135,10 @@ const Sidebar = () => {
                   setNotifcationsSelected(true);
                 }}
               >
-                <Notifications shrinkedSideBar={shrinkedSideBar} selected={notifcationsSelected} />
+                <Notifications
+                  shrinkedSideBar={shrinkedSideBar}
+                  selected={notifcationsSelected}
+                />
               </Box>
               <Box
                 onClick={() => {
@@ -167,7 +154,10 @@ const Sidebar = () => {
                   setNotifcationsSelected(false);
                 }}
               >
-                <Search shrinkedSideBar={shrinkedSideBar} selected={searchSelected} />
+                <Search
+                  shrinkedSideBar={shrinkedSideBar}
+                  selected={searchSelected}
+                />
               </Box>
               <Box
                 onClick={() => {
@@ -176,7 +166,6 @@ const Sidebar = () => {
               >
                 <Profile shrinkedSideBar={shrinkedSideBar} />
               </Box>
-             
 
               <Flex
                 onClick={handleLogOut}
@@ -203,9 +192,7 @@ const Sidebar = () => {
           }
         </Flex>
       </Box>
-      {searchSelected ? (
-        <SearchComponent />
-      ) : null}
+      {searchSelected ? <SearchComponent /> : null}
     </Flex>
   ) : (
     <Flex
