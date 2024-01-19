@@ -28,14 +28,18 @@ import useLogOut from "../../hooks/useLogOut";
 import { CloseIcon } from "@chakra-ui/icons";
 import useSearchUsers from "../../hooks/useSearchUsers";
 import searchResultsStore from "../../store/searchResultsStore";
+import Create from "./SidebarItems/Create";
+import Home from "./SidebarItems/Home";
+import Notifications from "./SidebarItems/Notifications";
+import Search from "./SidebarItems/Search";
+import Profile from "./SidebarItems/Profile";
+import SearchComponent from "./SearchComponent";
 
 const Sidebar = () => {
   const { handleLogOut, isLoggingOut } = useLogOut();
   const [shrinkedSideBar, setShrinkedSidebar] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const { isLoading, searchUsers } = useSearchUsers();
-  const searchResults = searchResultsStore((state) => state.profiles);
-  const navigate = useNavigate();
+  const [searchSelected, setSearchSelected] = useState(false);
+  const [notifcationsSelected, setNotifcationsSelected] = useState(false);
 
   const SidebarItems = [
     {
@@ -75,11 +79,6 @@ const Sidebar = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const handleSearchQuery = (e) => {
-    if (e !== null && e !== undefined && e !== "") {
-      searchUsers(e);
-    }
-  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -135,109 +134,50 @@ const Sidebar = () => {
           >
             <InstagramMobileLogo />
           </Link>
-          {isMobile ? (
-            <Flex direction={"row"} gap={5} cursor={"pointer"}>
-              {SidebarItems.map((item, index) => (
-                <Tooltip
-                  key={index}
-                  hasArrow
-                  label={item.text}
-                  placement="right"
-                  openDelay={400}
-                  display={{ base: "block", md: "none" }}
-                >
-                  <Link
-                    to={item.link || null}
-                    display={"flex"}
-                    as={RouterLink}
-                    alignItems={"center"}
-                    gap={4}
-                    _hover={{ bd: "whiteAlpha.400" }}
-                    borderRadius={6}
-                    p={2}
-                    w={{ base: 10, md: "full" }}
-                    justifyContent={{ base: "center", md: "flex-start" }}
-                  >
-                    {item.icon}
-                    <Box display={{ base: "none", md: "block" }}>
-                      {item.text}
-                    </Box>
-                  </Link>
-                </Tooltip>
-              ))}
-              <Tooltip
-                hasArrow
-                label={"Logout"}
-                placement="right"
-                openDelay={400}
-                display={{ base: "block", md: "none" }}
-              >
-                <Link
-                  mt={"auto"}
-                  to={"/auth"}
-                  display={"flex"}
-                  as={RouterLink}
-                  alignItems={"center"}
-                  gap={4}
-                  _hover={{ bd: "whiteAlpha.400" }}
-                  borderRadius={6}
-                  p={2}
-                  w={{ base: 10, md: "full" }}
-                  justifyContent={{ base: "center", md: "flex-start" }}
-                >
-                  <BiLogOut />
-                  <Box display={{ base: "none", md: "block" }}>Logout</Box>
-                </Link>
-              </Tooltip>
-            </Flex>
-          ) : (
+          {
             <Flex direction={"column"} gap={5} cursor={"pointer"}>
               {/* Large screen (desktop) sidebar content */}
-              {SidebarItems.map((item, index) => (
-                <Link
-                  onClick={item.onClick}
-                  key={index}
-                  to={item.link || null}
-                  as={RouterLink}
-                  _hover={{ bd: "whiteAlpha.400" }}
-                >
-                  <Box
-                    display={"flex"}
-                    borderRadius={8}
-                    gap={shrinkedSideBar ? 0 : 3}
-                    p={3}
-                    w={{ base: 10, md: "full" }}
-                    h={"full"}
-                    justifyContent={{
-                      base: "center",
-                      md: shrinkedSideBar ? "center" : "flex-start",
-                    }}
-                    onClick={() => setSelectedItem(index)}
-                    borderWidth={
-                      shrinkedSideBar
-                        ? selectedItem === index
-                          ? "1px"
-                          : "0px"
-                        : null
-                    }
-                    borderColor={
-                      shrinkedSideBar
-                        ? selectedItem === index
-                          ? "white"
-                          : "transparent"
-                        : null
-                    }
-                    _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
-                  >
-                    {item.icon}
-                    {!shrinkedSideBar ? (
-                      <Box display={{ base: "none", md: "block" }}>
-                        {item.text}
-                      </Box>
-                    ) : null}
-                  </Box>
-                </Link>
-              ))}
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(false);
+                }}
+              >
+                <Home shrinkedSideBar={shrinkedSideBar} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                  setSearchSelected(false);
+                  setNotifcationsSelected(true);
+                }}
+              >
+                <Notifications shrinkedSideBar={shrinkedSideBar} selected={notifcationsSelected} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(false);
+                }}
+              >
+                <Create shrinkedSideBar={shrinkedSideBar} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                  setSearchSelected(true);
+                  setNotifcationsSelected(false);
+                }}
+              >
+                <Search shrinkedSideBar={shrinkedSideBar} selected={searchSelected} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(false);
+                }}
+              >
+                <Profile shrinkedSideBar={shrinkedSideBar} />
+              </Box>
+             
+
               <Flex
                 onClick={handleLogOut}
                 alignItems={"center"}
@@ -260,93 +200,11 @@ const Sidebar = () => {
                 )}
               </Flex>
             </Flex>
-          )}
+          }
         </Flex>
       </Box>
-      {shrinkedSideBar ? (
-        <Box
-          mx={"16px"}
-          zIndex={2}
-          w={397}
-          h={"100vh"} 
-          backgroundColor={"#000000"}
-          borderRight={"1px solid #262626"}
-          borderRightRadius={10}
-          overflowY="auto"
-        >
-          <Box p={"12px 14px 36px 24px"}>
-            <Text fontWeight={"bold"} fontSize={"24px"}>
-              Search
-            </Text>
-          </Box>
-          <Box h={40} p={"0px 16px"}>
-            <InputGroup>
-              <Input
-                backgroundColor={"#262626"}
-                border={"null"}
-                focusBorderColor="null"
-                width={364.2}
-                placeholder="Search"
-                onChange={(e) => {
-                  handleSearchQuery(e.target.value);
-                  console.log(e.target.value);
-                }}
-              />
-              <InputRightElement>
-                {/*      
-       <IconButton
-        backgroundColor={"#C8C8C8"}
-
-    
-         
-           size={'xs'}
-           _hover={'null'}
-          
-           borderRadius={50}
-          aria-label="Clear input"
-          icon={<CloseIcon w={2} h={2} color={"black"} />}
-          onClick={() => {
-            // Handle clearing the input or any other action
-          }}
-          variant="ghost"
-        />
-      */}
-              </InputRightElement>
-            </InputGroup>
-
-            {shrinkedSideBar ? (
-              searchResults ? (
-                searchResults.map((item, index) => (
-                  <Box key={index} padding={"8px 24px"} cursor={"pointer"} _hover={{backgroundColor:"#121212"}} onClick={()=>{
-                   
-
-                    navigate(`/${item.username}`)
-
-                  }}>
-                     <Flex gap={4}>
-                     <Avatar  src={item.profilePicUrl} />
-                    <Box>
-                    <Text color={'#F5F5F5'} fontWeight={'bold'}>{item.username}</Text>
-                    <Flex gap={2}>
-                    <Text color={'#A8A8A8'} fontWeight={400}>{item.fullName}</Text>
-                    <Text color={'#A8A8A8'} fontWeight={400}>{item.followers.length} Followers</Text>
-                    </Flex>
-                    </Box>
-                     </Flex>
-                  </Box>
-                ))
-              ) : (
-                <Box mt={12}>
-                  <Text fontSize={"16px"} fontWeight={"bold"}>
-                    Recent
-                  </Text>
-                </Box>
-              )
-            ) : (
-              <></>
-            )}
-          </Box>
-        </Box>
+      {searchSelected ? (
+        <SearchComponent />
       ) : null}
     </Flex>
   ) : (
