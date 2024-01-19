@@ -3,7 +3,7 @@ import { Box, Link, useDisclosure } from '@chakra-ui/react';
 import { Link as RouterLink } from "react-router-dom";
 import { CreatePostLogo } from '../../../assets/constants';
 
-import CreateModal from './CreateModal/CreateModal';
+import CreateModal from './CreateModel/CreateModal';
 
 
 const Create = ({shrinkedSideBar}) => {
