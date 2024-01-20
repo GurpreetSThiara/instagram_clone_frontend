@@ -20,7 +20,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import UploadFile from "./UploadFile";
 import { FaArrowLeft } from 'react-icons/fa';
 import useUploadFileStore from "../../../../store/uploadFileStore";
@@ -34,6 +34,19 @@ const CreateModal = ({ isOpen, onClose }) => {
   const [iSt, setISt] = useState(null);
   const image = useUploadFileStore(s=>s.image)
   const [selectedFilter , setSelectedFilter] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleButtonClick = () => {
     // Trigger the click event of the hidden file input
@@ -55,27 +68,30 @@ const CreateModal = ({ isOpen, onClose }) => {
     }
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'full'} h={'500px'}>
+    <Modal isOpen={isOpen} onClose={onClose}  size={image?isMobile?'full':800:null}>
     <ModalOverlay />
-    <ModalContent backgroundColor="#262626" borderRadius={15} w={'auto'} h={'520px'}>
+    <ModalContent backgroundColor="#262626" borderRadius={15} w={image?'auto':'full'} h={image?isMobile?'auto':'auto':'400px'} m={'8'}   alignSelf={'center'} overflow={'auto'} >
       <ModalHeader borderBottom="1px solid #363636">
         <Flex alignItems={'center'} justifyContent={'space-between'}>
           {image && <Icon as={FaArrowLeft} boxSize={6} cursor="pointer" onClick={() => {}} />}
           <Text fontSize="16px" textAlign="center" flex="1">
             {!image ? "Create new post" : "Edit"}
           </Text>
+         {image &&  <Button backgroundColor={'transparent'} color={'blue.500'} _hover={{backgroundColor:"transparent",color:"white"}}>Next</Button>}
+
         </Flex>
       </ModalHeader>
   
-      <ModalBody alignItems="center" justifyContent="center" display="flex" overflow="hidden">
+      <ModalBody alignItems="center" justifyContent="center" display="flex" overflow="auto" >
         {!image ? (
           <UploadFile />
         ) : (
-          <Flex>
-            <Box>
-              <Image h={520} src={image} fit="contain" alt="Selected Image" className={selectedFilter} />
+          <Flex flexDirection={isMobile?'column':null} alignItems={'center'}  overflow={'auto'}>
+            <Box h={'auto'}>
+              <Image alignSelf={'center'} h={isMobile?300:480} src={image} fit="contain" alt="Selected Image" className={selectedFilter} overflow={'auto'} />
             </Box>
-            <Tabs>
+         <Box h={400}>
+         <Tabs fit='contain'>
               <TabList>
                 <Tab>
                   <Box w={120}>Filters</Box>
@@ -86,18 +102,22 @@ const CreateModal = ({ isOpen, onClose }) => {
               </TabList>
   
               <TabPanels>
-                <TabPanel overflow={'auto'}>
-               <Box overflow={'auto'} h={500}>
-               <Grid templateColumns="repeat(3, 1fr)" gap={4} cursor={'pointer'} overflow={'auto'}>
+                <TabPanel>
+               <Box overflow={'auto'} h={400}>
+             {   <Grid w={300} templateColumns="repeat(3, 1fr)" gap={4} cursor={'pointer'} overflow={'auto'}  >
                     {filterValues.map((filter, index) => (
                       <Box onClick={()=>{setSelectedFilter(filter.class)}} key={index} alignItems={'center'} display={'flex'} flexDirection={'column'}>
-                        <Image boxSize="100px" src={image} className={filter.class} />
+                        <Image h={100} src={image} className={filter.class} />
                         <Text color={'#A5A5A5'} fontSize={'small'}>
                           {filter.name}
                         </Text>
                       </Box>
                     ))}
-                  </Grid>
+                      </Grid>}
+                
+                
+             
+                
                </Box>
                 </TabPanel>
                 <TabPanel>
@@ -105,6 +125,7 @@ const CreateModal = ({ isOpen, onClose }) => {
                 </TabPanel>
               </TabPanels>
             </Tabs>
+         </Box>
           </Flex>
         )}
       </ModalBody>

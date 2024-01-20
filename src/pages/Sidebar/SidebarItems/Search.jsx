@@ -41,7 +41,7 @@ const Search = ({shrinkedSideBar , selected}) => {
       }
       _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
     >
-      <SearchLogo />
+     <Box> <SearchLogo /></Box>
       {!shrinkedSideBar ? (
         <Box display={{ base: "none", md: "block" }}>
           Search

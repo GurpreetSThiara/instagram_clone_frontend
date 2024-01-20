@@ -5,6 +5,7 @@ import { AiFillHome } from "react-icons/ai";
 
 
 const Home = ({shrinkedSideBar }) => {
+  localStorage.setItem('chakra-ui-color-mode',"dark");
 
 
   return (
@@ -43,7 +44,9 @@ const Home = ({shrinkedSideBar }) => {
     //   }
       _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
     >
-      {<AiFillHome size={'24'}/>}
+      <Box>
+      <AiFillHome size={24}/>
+      </Box>
       {!shrinkedSideBar ? (
         <Box display={{ base: "none", md: "block" }}>
           Home

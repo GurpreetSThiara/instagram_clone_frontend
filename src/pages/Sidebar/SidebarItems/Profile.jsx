@@ -5,16 +5,21 @@ import { NotificationsLogo } from '../../../assets/constants';
 import useAuthStore from '../../../store/authStore';
 
 const Profile = ({shrinkedSideBar}) => {
-    const user = useAuthStore(s=>s.user)
+    const user = useAuthStore(s=>s.user);
+    const navigate = useNavigate();
   return (
-    <Link
-    onClick={()=>{}}
+    <Box
+    onTouchEnd={()=>{
+      navigate(`/${user.username}`)
+    }}
+
    
-    to={'/'}
+    to={`/${user.username}`}
     as={RouterLink}
     _hover={{ bd: "whiteAlpha.400" }}
   >
     <Box
+      
       display={"flex"}
       borderRadius={8}
       gap={shrinkedSideBar ? 0 : 3}
@@ -42,18 +47,23 @@ const Profile = ({shrinkedSideBar}) => {
     //   }
       _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
     >
-      <Avatar
+ <Box >
+ <Avatar
+     onTouchEnd={()=>{
+      navigate(`/${user.username}`)
+    }}
           size={"sm"}
           name={user?.fullName}
           src={user?.profilePicUrl}
         />
+ </Box>
       {!shrinkedSideBar ? (
         <Box display={{ base: "none", md: "block" }}>
           Profile
         </Box>
       ) : null}
     </Box>
-  </Link>
+  </Box>
   )
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar, Box, Button, Flex, Link, Tooltip } from "@chakra-ui/react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   CreatePostLogo,
   InstagramLogo,
@@ -25,6 +25,7 @@ const Sidebar = () => {
   const [shrinkedSideBar, setShrinkedSidebar] = useState(false);
   const [searchSelected, setSearchSelected] = useState(false);
   const [notifcationsSelected, setNotifcationsSelected] = useState(false);
+  const navigate = useNavigate();
 
   const SidebarItems = [
     {
@@ -124,6 +125,8 @@ const Sidebar = () => {
               <Box
                 onClick={() => {
                   setShrinkedSidebar(false);
+                  setSearchSelected(false);
+
                 }}
               >
                 <Home shrinkedSideBar={shrinkedSideBar} />
@@ -143,6 +146,8 @@ const Sidebar = () => {
               <Box
                 onClick={() => {
                   setShrinkedSidebar(false);
+                  setSearchSelected(false);
+
                 }}
               >
                 <Create shrinkedSideBar={shrinkedSideBar} />
@@ -162,6 +167,8 @@ const Sidebar = () => {
               <Box
                 onClick={() => {
                   setShrinkedSidebar(false);
+                  setSearchSelected(false);
+
                 }}
               >
                 <Profile shrinkedSideBar={shrinkedSideBar} />
@@ -202,32 +209,53 @@ const Sidebar = () => {
       justifyContent={"space-between"}
       backgroundColor={"black"}
     >
-      {SidebarItems.map((item, index) => (
-        <Tooltip
-          key={index}
-          hasArrow
-          label={item.text}
-          placement="right"
-          openDelay={400}
-          display={{ base: "block", md: "none" }}
-        >
-          <Link
-            to={item.link || null}
-            display={"flex"}
-            as={RouterLink}
-            alignItems={"center"}
-            gap={4}
-            _hover={{ bd: "whiteAlpha.400" }}
-            borderRadius={6}
-            p={2}
-            w={{ base: 10, md: "full" }}
-            justifyContent={{ base: "center", md: "flex-start" }}
-          >
-            {item.icon}
-            <Box display={{ base: "none", md: "block" }}>{item.text}</Box>
-          </Link>
-        </Tooltip>
-      ))}
+     <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                }}
+              >
+                <Home shrinkedSideBar={shrinkedSideBar} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                  setSearchSelected(false);
+                  setNotifcationsSelected(false);
+                }}
+              >
+                <Notifications
+                  shrinkedSideBar={shrinkedSideBar}
+                  selected={notifcationsSelected}
+                />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                }}
+              >
+                <Create shrinkedSideBar={shrinkedSideBar} />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+                  setSearchSelected(false);
+                  setNotifcationsSelected(false);
+                }}
+              >
+                <Search
+                  shrinkedSideBar={shrinkedSideBar}
+                  selected={searchSelected}
+                />
+              </Box>
+              <Box
+                onClick={() => {
+                  setShrinkedSidebar(true);
+              
+                }}
+        
+              >
+                <Profile shrinkedSideBar={shrinkedSideBar} />
+              </Box>
     </Flex>
   );
 };

@@ -40,7 +40,9 @@ const Notifications = ({shrinkedSideBar , selected}) => {
       }
       _hover={{ backgroundColor: "#1A1A1A", borderRadius: "8" }}
     >
-      <NotificationsLogo />
+     <Box>
+     <NotificationsLogo />
+     </Box>
       {!shrinkedSideBar ? (
         <Box display={{ base: "none", md: "block" }}>
           Notifications

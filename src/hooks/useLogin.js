@@ -3,11 +3,13 @@ import useShowToast from "./useShowToast";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../Firebase/Firebase";
 import useAuthStore from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
 	const showToast = useShowToast();
 	const [signInWithEmailAndPassword, , loading, error] = useSignInWithEmailAndPassword(auth);
 	const loginUser = useAuthStore((state) => state.login);
+	const navigate = useNavigate();
 
 	const login = async (inputs) => {
 		if (!inputs.email || !inputs.password) {
@@ -21,6 +23,8 @@ const useLogin = () => {
 				const docSnap = await getDoc(docRef);
 				localStorage.setItem("instaUser", JSON.stringify(docSnap.data()));
 				loginUser(docSnap.data());
+				navigate('/');
+
 			}
 		} catch (error) {
 			showToast("Error", error.message, "error");

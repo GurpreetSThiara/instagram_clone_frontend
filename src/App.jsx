@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import PageLayouts from "./Layouts/PageLayouts/PageLayouts";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import useAuthStore from "./store/authStore";
+import Notifications from "./pages/Notifications/Notifications";
 
 
 
@@ -17,6 +18,7 @@ function App() {
       <Route path='/' element ={authUser?<HomePage/> :<Navigate to={"/auth"}/>}/>
       <Route path='/auth' element ={<Auth/>}/>
       <Route path='/:username' element ={<ProfilePage/>}/>
+      <Route path='/:username/notifications' element ={<Notifications/>}/>
      </Routes>
     </PageLayouts>
   )
