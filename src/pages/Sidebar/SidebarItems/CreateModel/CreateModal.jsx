@@ -33,8 +33,11 @@ import './filters.css';
 import useAuthStore from "../../../../store/authStore";
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import useShowToast from "../../../../hooks/useShowToast";
+import useCreatePost from "../../../../hooks/useCreatePost";
 
 const CreateModal = ({ isOpen, onClose }) => {
+  const showToast = useShowToast();
   const fileInputRef = useRef(null);
   const [selecedFile, setSelectedFile] = useState(null);
   const [iSt, setISt] = useState(null);
@@ -45,10 +48,38 @@ const CreateModal = ({ isOpen, onClose }) => {
   const [showForm , setShowForm] = useState(false);
   const user = useAuthStore(s=>s.user);
   const [aspectRatioModalOpen, setAspectRatioModalOpen] = useState(false);
-  const [crop, setCrop] = useState({ aspect: 1 / 1 }); // Initial aspect ratio for cropping
+  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const imgResultRef = useRef(null);
+  const { isLoading, handleCreatePost } = useCreatePost();
+  const [caption , setCaption] = useState("");
+
 
   // State for storing the selected aspect ratio
   const [selectedAspectRatio, setSelectedAspectRatio] = useState(1);
+  const handlePostCreation = async () => {
+ 
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = imgResultRef.current;
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.filter = selectedFilter; // Apply the selected filter
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+
+    // Get the modified image data as a data URL
+    const modifiedImageDataUrl = canvas.toDataURL('image/jpeg');
+    
+		try {
+			await handleCreatePost(modifiedImageDataUrl, caption);
+			// onClose();
+			// setCaption("");
+			setSelectedFile(null);
+      removeImage(null);
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		}
+	};
   
 
   useEffect(() => {
@@ -62,6 +93,7 @@ const CreateModal = ({ isOpen, onClose }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
 
   const handleButtonClick = () => {
     // Trigger the click event of the hidden file input
@@ -102,7 +134,7 @@ const CreateModal = ({ isOpen, onClose }) => {
           setShowForm(true)
          }}>Next</Button>}
             {showForm && image &&  <Button backgroundColor={'transparent'} color={'blue.500'} _hover={{backgroundColor:"transparent",color:"white"}} onClick={()=>{
-          setShowForm(true)
+         handlePostCreation();
          }}>Share</Button>}
 
         </Flex>
@@ -120,7 +152,7 @@ const CreateModal = ({ isOpen, onClose }) => {
             onChange={(newCrop) =>{}}
             onComplete={(crop, pixelCrop) => {}}
           /> */}
-              <img height={400} width={400} style={{fit:"contain",aspectRatio:selectedAspectRatio}}     src={image}  alt="Selected Image" className={selectedFilter} overflow={'auto'} />
+              <img  ref={imgResultRef} height={400} width={400} style={{fit:"contain",aspectRatio:selectedAspectRatio}}     src={image}  alt="Selected Image" className={selectedFilter} overflow={'auto'} />
             </Box>
         {!showForm &&  <Box h={400}>
          <Tabs fit='contain'>
@@ -164,7 +196,7 @@ const CreateModal = ({ isOpen, onClose }) => {
             <Text fontWeight={'bold'}>{user.username}</Text>
           </Flex>
           <Box>
-            <Textarea  placeholder="Write a caption.." maxLength={200} border={'null'}/>
+            <Textarea onChange={(e) => setCaption(e.target.value)}  placeholder="Write a caption.." maxLength={200} border={'null'}/>
           </Box>
           </Box>}
           </Flex>

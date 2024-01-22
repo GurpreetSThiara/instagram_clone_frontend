@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import FeedPost from "./FeedPost";
 import { useEffect, useState } from "react";
+import usePostStore from "../../store/postStore";
 
 const FeedPosts = () => {
   const [isLoading, setLoading] = useState(true);
@@ -17,6 +18,10 @@ const FeedPosts = () => {
       setLoading(false);
     }, 2000);
   }, []);
+
+  useEffect(()=>{
+
+  },[])
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&

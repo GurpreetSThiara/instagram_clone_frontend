@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import {create} from "zustand";//redux//provider
 
 const useAuthStore =create((set)=>({
     user:JSON.parse(localStorage.getItem("instaUser")),
