@@ -4,6 +4,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Flex,
@@ -25,6 +26,7 @@ import EditProfile from '../EditProfile/EditProfile';
 import useFollowUser from '../../../hooks/useFollowUser';
 import useGetUserProfileById from './../../../hooks/useGetUserProfileById';
 import useFindAllFollowersOrFollowing from '../../../hooks/useGetAllFollowersOrFollowing';
+import useAllFollowers from '../../../store/userFollowers';
 
 const ProfileImage = ({image}) => (
   <AvatarGroup justifyContent={{base:"flex-end",sm:"center"}} alignSelf="flex-end" marginRight="16px">
@@ -107,16 +109,26 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
   }, []);
 
   const isLargeScreen = windowWidth > 700;
-
+  
 
   const ProfileLowerPart=({username, numberOfPosts, followers, following , fullName,bio})=>{
-    const [AllFollowers,setAllFollowers] = useState(null);
-    const {findAllFollowers} = useFindAllFollowersOrFollowing();
+    // const [AllFollowers,setAllFollowers] = useState(null);
+    const [profilesLoading,SetProfilesLoading] = useState(true);
+    const {findAllFollowers ,userProfiles} = useFindAllFollowersOrFollowing();
+    const AllFollowers = useAllFollowers(s=>s.followers)
+    const findFollowers =async ()=>{
+       
+    await findAllFollowers(followers);
+   
+     }
+     useEffect(() => {
+      // This will log the updated state whenever AllFollowers changes
+      console.log(AllFollowers);
+      console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+  }, [AllFollowers]);
   
-    const ProfileStatistics =async()=>{
-      const findFollowers =({followers})=>{
-       const {isLoading , profiles} = findAllFollowers();
-      }
+    const ProfileStatistics =()=>{
+    
       return <Container my={{base:2,md:0}} borderTop={!isLargeScreen?"1px solid":""} borderBottom={!isLargeScreen?"1px solid":""} borderColor={"whiteAlpha.300"}  >
 
 <Flex alignItems="center" justify={isLargeScreen?"":"space-around"} gap={{ base: 2, sm: 10 }} my={8} >
@@ -130,10 +142,10 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
       </Text>
       <Box fontSize={{ base: 'xs', md: 18 }}  textAlign="center" cursor={'pointer'} onClick={()=>{
         onModelMenuOpen(true)
-        findFollowers(followers);
+        findFollowers();
       }}>
         <Text as={isLargeScreen?"span":""} fontWeight="bold" mr={1}>
-          {followers}
+          {followers.length}
         </Text>
         <Text  as={isLargeScreen?"span":""}color={"#A8A8A8"} fontSize={{base:15}}>
         followers
@@ -148,19 +160,7 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
        </Text>
       </Box>
     </Flex>
-    <Modal isOpen={isModelMenuOpen} onClose={onModelMenuClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
 
-           
-          </ModalBody>
-
-         
-        </ModalContent>
-      </Modal>
       </Container>
     }
     return <Box>
@@ -176,6 +176,52 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
       </Button>
       <Text fontSize="sm">{bio}</Text>
       {!isLargeScreen? <ProfileStatistics/>:null}
+      <Modal isOpen={isModelMenuOpen} onClose={onModelMenuClose}>
+        <ModalOverlay />
+        <ModalContent h={400} backgroundColor={'#262626'}>
+          <ModalHeader alignItems={'center'} display={'flex'} justifyContent={'center'} borderBottom={'1px solid #363636'}><Text alignSelf={'center'}>Folllowers</Text></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+           { AllFollowers && (<>
+           {AllFollowers.map((item , index)=> <Flex overflow={'auto'} p={2} alignItems={'space-between'} justifyContent={'space-between'} display={'flex'} key={index}       padding={"8px 24px"}
+              cursor={"pointer"}
+              // _hover={{ backgroundColor: "#121212" }}
+              >
+            <Box
+              key={index}
+        
+              onClick={() => {
+                // navigate(`/${item.username}`);
+              }}
+            >
+              <Flex gap={4}>
+                <Avatar src={item.profilePicUrl} />
+                <Box>
+                  <Text color={"#F5F5F5"} fontWeight={"bold"}>
+                    {item.username}
+                  </Text>
+                  <Flex gap={2}>
+                    <Text color={"#A8A8A8"} fontWeight={400}>
+                      {item.fullName}
+                    </Text>
+                    {/* <Text color={"#A8A8A8"} fontWeight={400}>
+                      {item.followers.length} Followers
+                    </Text> */}
+                  </Flex>
+                </Box>
+              
+              </Flex>
+            </Box>
+            <Button>Remove</Button>
+           </Flex>)}
+           </>)}
+           {!AllFollowers && (<CircularProgress/>)}
+           
+          </ModalBody>
+
+         
+        </ModalContent>
+      </Modal>
     </Box>
   }
   
@@ -187,7 +233,7 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
           <ProfileImage image={userProfile.profilePicUrl} />
            <Box>
            <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile}   vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen}  uid={userProfile.uid} />
-          <ProfileLowerPart username={userProfile.username}  numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
+          <ProfileLowerPart username={userProfile.username}  numberOfPosts={userProfile.posts.length} followers={userProfile.followers} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
            </Box>
         </Flex>
       ) : (
@@ -196,7 +242,7 @@ const onModelMenuClose = () => setIsModelMenuOpen(false);
           <ProfileImage />
           <ProfileUpperPart username={userProfile.username} vistingOwnProfile={vistingOwnProfile} vistingAnotherProfile={vistingAnotherProfile} onOpen={onOpen}    uid={userProfile.uid}  />
         </Flex>
-        <ProfileLowerPart username={userProfile.username} numberOfPosts={userProfile.posts.length} followers={userProfile.followers.length} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
+        <ProfileLowerPart username={userProfile.username} numberOfPosts={userProfile.posts.length} followers={userProfile.followers} following={userProfile.following.length} fullName={userProfile.fullName} bio={userProfile.bio}/>
 
        </>
       )}
