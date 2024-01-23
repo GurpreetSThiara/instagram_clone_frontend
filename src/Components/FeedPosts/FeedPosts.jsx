@@ -9,19 +9,22 @@ import {
 import FeedPost from "./FeedPost";
 import { useEffect, useState } from "react";
 import usePostStore from "../../store/postStore";
+import useGetFeedPosts from './../../hooks/useGetFeedposts';
 
 const FeedPosts = () => {
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
+  const { isLoading, posts } = useGetFeedPosts();
+  console.log(posts)
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
+  // }, []);
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
-  },[])
+  // },[])
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
@@ -39,26 +42,20 @@ const FeedPosts = () => {
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && (
-    <>
-        <FeedPost
-          username={"userName"}
-          avatar={"src/public/img1.png"}
-          image={"src/public/img1.png"}
-        />
-            <FeedPost
-          username={"userName"}
-          avatar={"src/public/img1.png"}
-          image={"src/public/img1.png"}
-        />
-            <FeedPost
-          username={"userName"}
-          avatar={"src/public/img1.png"}
-          image={"src/public/img1.png"}
-        />
-    </>
-        
-      )}
+      {!isLoading && posts && posts.length!==0? posts.map((post)=>(
+      <FeedPost key={posts.id} post={post} />)):<>  <Container maxW={"container.sm"} textAlign={"center"}>
+      <Box fontSize={"xl"} fontWeight={"bold"} mb={4}>
+        Oops! It seems a bit lonely here...
+      </Box>
+      <Box fontSize={"md"} mb={4}>
+        Why not follow some amazing people and make friends? 🌟
+      </Box>
+      {/* Add a funny message or suggestion */}
+      <Box fontSize={"sm"} fontStyle={"italic"} color={"gray.500"}>
+        {"Pro tip: Following people can't hurt (unless you're a ninja, then be careful with those sharp edges)"}.
+      </Box>
+    </Container></>
+      }
     </Container>
   );
 };

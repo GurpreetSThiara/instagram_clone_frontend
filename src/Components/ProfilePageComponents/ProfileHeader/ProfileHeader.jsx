@@ -7,6 +7,13 @@ import {
   Container,
   Divider,
   Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
   VStack,
   useDisclosure,
@@ -16,6 +23,8 @@ import useUserProfileStore from '../../../store/userProfileStore';
 import useAuthStore from './../../../store/authStore';
 import EditProfile from '../EditProfile/EditProfile';
 import useFollowUser from '../../../hooks/useFollowUser';
+import useGetUserProfileById from './../../../hooks/useGetUserProfileById';
+import useFindAllFollowersOrFollowing from '../../../hooks/useGetAllFollowersOrFollowing';
 
 const ProfileImage = ({image}) => (
   <AvatarGroup justifyContent={{base:"flex-end",sm:"center"}} alignSelf="flex-end" marginRight="16px">
@@ -79,6 +88,11 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
 
 
   const {isOpen , onOpen , onClose} = useDisclosure();
+  
+  const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
+  const onModelMenuOpen = () => setIsModelMenuOpen(true);
+const onModelMenuClose = () => setIsModelMenuOpen(false);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -94,8 +108,15 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
 
   const isLargeScreen = windowWidth > 700;
 
+
   const ProfileLowerPart=({username, numberOfPosts, followers, following , fullName,bio})=>{
-    const ProfileStatistics =()=>{
+    const [AllFollowers,setAllFollowers] = useState(null);
+    const {findAllFollowers} = useFindAllFollowersOrFollowing();
+  
+    const ProfileStatistics =async()=>{
+      const findFollowers =({followers})=>{
+       const {isLoading , profiles} = findAllFollowers();
+      }
       return <Container my={{base:2,md:0}} borderTop={!isLargeScreen?"1px solid":""} borderBottom={!isLargeScreen?"1px solid":""} borderColor={"whiteAlpha.300"}  >
 
 <Flex alignItems="center" justify={isLargeScreen?"":"space-around"} gap={{ base: 2, sm: 10 }} my={8} >
@@ -107,23 +128,39 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
        posts
        </Text>
       </Text>
-      <Text fontSize={{ base: 'xs', md: 18 }}  textAlign="center">
+      <Box fontSize={{ base: 'xs', md: 18 }}  textAlign="center" cursor={'pointer'} onClick={()=>{
+        onModelMenuOpen(true)
+        findFollowers(followers);
+      }}>
         <Text as={isLargeScreen?"span":""} fontWeight="bold" mr={1}>
           {followers}
         </Text>
         <Text  as={isLargeScreen?"span":""}color={"#A8A8A8"} fontSize={{base:15}}>
         followers
        </Text>
-      </Text>
-      <Text fontSize={{ base: 'xs', md: 18 }}  textAlign="center">
+      </Box>
+      <Box fontSize={{ base: 'xs', md: 18 }}  textAlign="center" cursor={'pointer'}>
         <Text as={isLargeScreen?"span":""} fontWeight="bold" mr={1}>
           {following}
         </Text>
         <Text as={isLargeScreen?"span":""} color={"#A8A8A8"}  fontSize={{base:15}}>
         following
        </Text>
-      </Text>
+      </Box>
     </Flex>
+    <Modal isOpen={isModelMenuOpen} onClose={onModelMenuClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+
+           
+          </ModalBody>
+
+         
+        </ModalContent>
+      </Modal>
       </Container>
     }
     return <Box>
