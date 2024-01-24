@@ -2,13 +2,16 @@ import { Box, Grid, Skeleton, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import ProfilePost from './ProfilePost';
 import useGetUserPosts from '../../../hooks/useGetUserPosts';
+import useUserProfileStore from '../../../store/userProfileStore';
 
 const ProfilePosts = () => {
     // const [isLoading , setIsLoading] = useState(true)
     const { isLoading, posts } = useGetUserPosts();
+    const selectedTab = useUserProfileStore(s=>s.selectedTab);
 
 
 
+  if(selectedTab!=="posts") return;
   return (
     <Grid
     templateColumns={{

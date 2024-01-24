@@ -5,6 +5,7 @@ import ProfilePosts from "../../Components/ProfilePageComponents/ProfilePosts/Pr
 import { useParams } from "react-router-dom";
 import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
 import { Link as RouterLink } from "react-router-dom";
+import ProfileFeedPosts from "../../Components/ProfilePageComponents/ProfileFeedPosts/ProfileFeedPosts";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -48,6 +49,7 @@ const ProfilePage = () => {
       >
         <ProfileTabs />
         <ProfilePosts />
+        <ProfileFeedPosts/>
       </Flex>
     </Container>
   );

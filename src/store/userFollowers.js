@@ -1,4 +1,4 @@
-import {create} from "zustand";//redux//provider
+import {create} from "zustand";
 
 const useAllFollowers =create((set)=>({
     followers:null,

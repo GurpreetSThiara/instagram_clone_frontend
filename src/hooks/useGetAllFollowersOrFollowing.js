@@ -2,15 +2,17 @@ import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../Firebase/Firebase";
 import { useState } from "react";
 import useAllFollowers from "../store/userFollowers";
+import useAllFollowings from "../store/useFollowings";
 
 
 const useFindAllFollowersOrFollowing = () => {
   const [isLoading, setIsLoading] = useState(true);
   const setFollowers = useAllFollowers(s=>s.setFollowers)
+  const setFollowings = useAllFollowings(s=>s.setFollowings)
 	// const [userProfiles, setUserProfiles] = useState(null);
-  let userProfiles = [];
+ 
     const findAllFollowers =async(followers)=>{
-     
+      let userProfiles = [];
       console.log(followers);
      
       setIsLoading(true);
@@ -35,12 +37,36 @@ const useFindAllFollowersOrFollowing = () => {
        
      
     }
+
+    const findAllFollowings =async(following)=>{
+      let userProfiles = [];
     
-    console.log("22222222222222222")
-    console.log(userProfiles)
+      setIsLoading(true);
+        for(let id of following){
+          
+          try {
+            const userRef = await getDoc(doc(firestore, "users", id));
+            if (userRef.exists()) {
+              userProfiles.push(userRef.data())
+            
+            }
+          } catch (error) {
+            // showToast("Error", error.message, "error");
+          } finally {
+            setIsLoading(false);
+          }
+        }
+
+     
+        setFollowings(userProfiles) ;
+       
+     
+    }
+    
+  
  
   
-  return {findAllFollowers,userProfiles}
+  return {findAllFollowers , findAllFollowings}
 }
 
 export default useFindAllFollowersOrFollowing
