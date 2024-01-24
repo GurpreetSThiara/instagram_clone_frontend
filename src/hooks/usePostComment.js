@@ -34,7 +34,24 @@ const usePostComment = () => {
 		}
 	};
 
-	return { isCommenting, handlePostComment };
+	const handleUpdateComment = async (createdBy,postId,commentObject) =>{
+		if (isCommenting) return;
+		if (!authUser) return showToast("Error", "You must be logged in to comment", "error");
+		setIsCommenting(true);
+	
+		try {
+			await updateDoc(doc(firestore, "posts", postId ,'comments',createdBy), commentObject
+			);
+			// addComment(postId, newComment);
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		} finally {
+			setIsCommenting(false);
+		}
+
+	}
+
+	return { isCommenting, handlePostComment ,handleUpdateComment };
 };
 
 export default usePostComment;
