@@ -63,7 +63,7 @@ const ProfilePost = ({post}) => {
 
 
   return (
-<>
+<Box>
     <GridItem
     cursor={"pointer"}
     borderRadius={4}
@@ -111,16 +111,16 @@ const ProfilePost = ({post}) => {
       
     </GridItem>
 
-    <Modal  isOpen={isOpen} onClose={onClose} isCentered={true} size={{base:"3xl",md:"3xl"}}>
+    <Modal  isOpen={isOpen} onClose={onClose} isCentered={true} size={{base:"3xl",md:"3xl"}} h={500}>
     <ModalOverlay
     bg='blackAlpha.300'
     backdropFilter='blur(4px) hue-rotate(90deg)'
     />
-        <ModalContent h={500} p={0}>
+        <ModalContent p={0}>
       
             <ModalBody bg={"black"} p={0
-            } pb={5}  border={"1px solid"} borderColor={"whiteAlpha.300"}>
-                <Flex gap={4} w={{base:"90%", sm:"70%", md:"full"}} mx={"auto"}>
+            } h={600} pb={5}  border={"1px solid"} borderColor={"whiteAlpha.300"}>
+                <Flex gap={4} w={'full'} mx={"auto"}>
                     <Box  borderRadius={4} overflow={"hidden"} flex={1.5}>
                         <Image h={500}   src={post.imageURL} alt='post' fit={'contain'}/>
 
@@ -139,6 +139,7 @@ const ProfilePost = ({post}) => {
                         </Flex>
                    
                         <VStack w={"full"} alignItems={"center"} h={"350px"}  overflowY={"auto"} WebkitOverflowScrolling={"touch"} >
+                            {post.comments && post.comments.map((item,index)=><Box w={'full'} pl={4} pr={4} key={index}><Comment comment={item}/></Box>)}
                             
 
 
@@ -171,7 +172,7 @@ const ProfilePost = ({post}) => {
         </ModalContent>
     </Modal>
 
-    </>
+    </Box>
   )
 }
 
