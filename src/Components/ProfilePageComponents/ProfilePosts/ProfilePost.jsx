@@ -7,13 +7,15 @@ import Comment from '../../Comment/Comment'
 import PostFooter from './../../FeedPosts/PostFooter';
 import { useState } from 'react'
 import { color } from 'framer-motion'
+import useAuthStore from '../../../store/authStore'
 
-const ProfilePost = ({img}) => {
+const ProfilePost = ({post}) => {
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
     const onModelMenuOpen = () => setIsModelMenuOpen(true);
   const onModelMenuClose = () => setIsModelMenuOpen(false);
+  const user = useAuthStore(s=>s.user);
 
   const modalMenuItems=[
     {
@@ -105,55 +107,46 @@ const ProfilePost = ({img}) => {
 
         </Flex>
 
-        <Image src={img} alt='profile post' h={"100%"} w={"100%"}  objectFit={"cover"}/>
+        <Image src={post.imageURL} alt='profile post' h={"100%"} w={"100%"}  objectFit={"cover"}/>
       
     </GridItem>
 
-    <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{base:"3xl",md:"3xl"}}>
-        <ModalOverlay/>
-        <ModalContent>
+    <Modal  isOpen={isOpen} onClose={onClose} isCentered={true} size={{base:"3xl",md:"3xl"}}>
+    <ModalOverlay
+    bg='blackAlpha.300'
+    backdropFilter='blur(4px) hue-rotate(90deg)'
+    />
+        <ModalContent h={500} p={0}>
       
-            <ModalBody bg={"black"} pb={5}>
+            <ModalBody bg={"black"} p={0
+            } pb={5}  border={"1px solid"} borderColor={"whiteAlpha.300"}>
                 <Flex gap={4} w={{base:"90%", sm:"70%", md:"full"}} mx={"auto"}>
-                    <Box borderRadius={4} overflow={"hidden"} border={"1px solid"} borderColor={"whiteAlpha.300"} flex={1.5}>
-                        <Image src={img} alt='post'/>
+                    <Box  borderRadius={4} overflow={"hidden"} flex={1.5}>
+                        <Image h={500}   src={post.imageURL} alt='post' fit={'contain'}/>
 
                     </Box>
-                    <Flex flex={1} flexDirection={"column"} px={10} display={{base:"none",md:"flex"}}>
-                        <Flex alignItems={"center"} justifyContent={"space-between"}>
-                        <Flex alignItems={"center"} gap={4}>
-                            <Avatar src='src/public/profilepic.png' size={"sm"} name="User"/>
+                    <Flex  borderLeft={"1px solid"} borderColor={"whiteAlpha.300"} flex={1} flexDirection={"column"}  display={{base:"none",md:"flex"}}>
+                        <Flex alignItems={"center"} justifyContent={"space-between"} border={"1px solid"} borderColor={"whiteAlpha.300"} p={4}>
+                        <Flex alignItems={"center"} gap={4} >
+                            <Avatar src={user.profilePicUrl} size={"sm"} name="User"/>
                             <Text fontWeight={"bold"} fontSize={12}>
-                                user
+                                {user.username}
                             </Text>
                         </Flex>
                         <Box onClick={onModelMenuOpen}>
                             <BsThreeDots color='white' size={20} cursor={"pointer"}  _hover={{ color:"#A8A8A8"}}  />
                         </Box>
                         </Flex>
-                        <Divider my={4} bg={"gray.500"}/>
-                        <VStack w={"full"} alignItems={"center"} maxH={"350px"}  overflowY={"auto"} WebkitOverflowScrolling={"touch"} >
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
-
-                            <Comment createdAt="1day ago" username={"userName"} profilePic={'src/public/profilePic.png'} text={"nice pic"}/>
+                   
+                        <VStack w={"full"} alignItems={"center"} h={"350px"}  overflowY={"auto"} WebkitOverflowScrolling={"touch"} >
+                            
 
 
                         </VStack>
                         <Divider my={4} bg={"gray.8000"} />
-                        <PostFooter isProfilePage={TextTrackCueList}/>
+                        <Box p={4}>
+                        <PostFooter isProfilePage={true} post={post} user={user}/>
+                        </Box>
 
                     </Flex>
                 </Flex>

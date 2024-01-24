@@ -14,7 +14,7 @@ import useGetFeedPosts from './../../hooks/useGetFeedposts';
 const FeedPosts = () => {
   // const [isLoading, setLoading] = useState(true);
   const { isLoading, posts } = useGetFeedPosts();
-  console.log(posts)
+
 
   // useEffect(() => {
   //   setTimeout(() => {

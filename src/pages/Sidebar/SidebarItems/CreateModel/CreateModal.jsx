@@ -121,7 +121,7 @@ const CreateModal = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}  size={image?isMobile?'full':800:null}>
     <ModalOverlay />
-    <ModalContent backgroundColor="#262626" borderRadius={15} w={image?'auto':'full'} h={image?isMobile?'auto':'auto':'400px'} m={'8'}   alignSelf={'center'} overflow={'auto'} >
+    <ModalContent backgroundColor="#262626" borderRadius={15} w={image?'auto':'full'} h={image?isMobile?'auto':'auto':'400px'} marginTop={32}   alignSelf={'center'} overflow={'auto'} >
       <ModalHeader borderBottom="1px solid #363636">
         <Flex alignItems={'center'} justifyContent={'space-between'}>
           {image && <Icon as={FaArrowLeft} boxSize={6} cursor="pointer" onClick={() => {
