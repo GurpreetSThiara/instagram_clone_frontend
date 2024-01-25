@@ -34,6 +34,7 @@ const useGetUserPosts = () => {
         posts.sort((a, b) => b.createdAt - a.createdAt);
         let resPosts = [];
         let comments = [];
+        let replies = [];
         for (let post of posts) {
           const subCollectionRef = collection(firestore, "posts", post.id, "comments");
           const querySubCollection = query(subCollectionRef);
@@ -42,7 +43,7 @@ const useGetUserPosts = () => {
             comments.push({ ...doc.data(), id: doc.id });
           });
 		  
-          resPosts.push({ post: post, comments: comments });
+          resPosts.push({ post: post, comments: {comment:comments,replies:[]} });
           comments = [];
         }
         setPosts(resPosts);

@@ -23,7 +23,7 @@ const useLogin = () => {
 				const docSnap = await getDoc(docRef);
 				localStorage.setItem("instaUser", JSON.stringify(docSnap.data()));
 				loginUser(docSnap.data());
-				navigate('/');
+				// navigate('/');
 
 			}
 		} catch (error) {

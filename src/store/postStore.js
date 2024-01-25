@@ -2,6 +2,11 @@ import { create } from "zustand";
 
 const usePostStore = create((set) => ({
   posts: [],
+  isReplyingComment:false,
+  replyingTo:null,
+
+  setIsReplyingComment:(isReplyingComment)=>set({isReplyingComment}),
+  setReplyingTo:(replyingTo)=>set({replyingTo}),
   createPost: (post) => set((state) => ({ posts: [post, ...state.posts] })),
   deletePost: (id) =>
     set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
@@ -12,7 +17,7 @@ const usePostStore = create((set) => ({
         if (post.post.id === postId) {
           return {
             ...post,
-            comments: [...post.comments, comment],
+            comments: [...post.comments.comment, comment],
           };
         }
         return post;
@@ -23,7 +28,7 @@ const usePostStore = create((set) => ({
     set((state) => ({
       posts: state.posts.map((post) => {
         if (post.post.id === postId) {
-          const updatedComments = post.comments.map((existingComment) => {
+          const updatedComments = post.comments.comment.map((existingComment) => {
           
             if (existingComment.id === comment.id) {
              

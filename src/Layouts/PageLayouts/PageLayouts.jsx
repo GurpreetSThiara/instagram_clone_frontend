@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../Firebase/Firebase";
+import useAuthStore from "../../store/authStore";
 
 const PageLayouts = ({ children }) => {
   
@@ -22,7 +23,7 @@ const PageLayouts = ({ children }) => {
   }, []);
 
   const pathName = useLocation();
-  const [user,loading,error] = useAuthState(auth);
+  const user = useAuthStore(s=>s.user)
   const canRenderSidebar= user && pathName !== "/auth"  ; 
   return (
     !isMobile?

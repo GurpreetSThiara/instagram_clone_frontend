@@ -6,6 +6,7 @@ import { CalcTime } from "../../utils/CalcTime";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
+import usePostStore from "../../store/postStore";
 
 const Comment = ({ comment }) => {
   const { isLoading, userProfile, setUserProfile } = useGetUserProfileById(
@@ -14,6 +15,9 @@ const Comment = ({ comment }) => {
   const [like , setLike] = useState(false);
   const { handleUpdateComment } = usePostComment();
   const user = useAuthStore(s=>s.user);
+  const setIsReplyingComment = usePostStore(s=>s.setIsReplyingComment);
+  const setReplyingTo = usePostStore(s=>s.setReplyingTo);
+
   
 
   const handleLikeComment = ()=>{
@@ -107,15 +111,19 @@ const Comment = ({ comment }) => {
             <Text fontSize={12} color={"gray"}>
               {CalcTime(comment.createdAt)}
             </Text>
-            <Box backgroundColor={"transparent"}>
+            <Box backgroundColor={"transparent"} cursor={'pointer'}>
               {" "}
               <Text fontSize={12} color={"gray"}>
-               {comment.likes} Likes
+               {comment.likes} Like
               </Text>
             </Box>
-            <Box backgroundColor={"transparent"}>
+            <Box backgroundColor={"transparent"}  cursor={'pointer'} onClick={()=>{
+                setReplyingTo('@'+userProfile.username);
+                setIsReplyingComment(true);
+
+            }}>
               {" "}
-              <Text fontSize={12} color={"gray"}>
+              <Text fontSize={12} color={"gray"} >
                 Reply
               </Text>
             </Box>

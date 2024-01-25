@@ -2,9 +2,30 @@ import { Avatar, Box, Button, Flex, Skeleton, SkeletonCircle, Text } from '@chak
 import useFollowUser from '../../hooks/useFollowUser';
 import { Link } from 'react-router-dom';
 import { CalcTime } from '../../utils/CalcTime';
+import useAuthStore from '../../store/authStore';
+import { useEffect, useState } from 'react';
 
 const PostHeader = ({ post, creatorProfile }) => {
+	const user = useAuthStore(s=>s.user);
+	const[follow,setFollow]=useState(false);
+	const[showFollow,setShowFolllow]=useState(false);
+
+	
 	const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(post.createdBy);
+	useEffect(()=>{
+		console.log(creatorProfile);
+		console.log("pppppppppppppppppppppppppppppppprrrrrrrrrrrrrrrrrrrrrrrrr");
+		// if(user.uid === creatorProfile.id){
+		// 	setShowFolllow(false);
+		// }else{
+		// 	if(user.following.includes(creatorProfile.uid)){
+		// 		setFollow('true');
+		// 	}
+		// }
+	
+	},[]);
+
+	
 
 	return (
 		<Flex justifyContent={"space-between"} alignItems={"center"} w={"full"} my={2}>
@@ -41,7 +62,8 @@ const PostHeader = ({ post, creatorProfile }) => {
 					onClick={handleFollowUser}
 					isLoading={isUpdating}
 				>
-					{isFollowing ? "Unfollow" : "Follow"}
+					{creatorProfile && (user.uid !== creatorProfile.uid) && (user.following.includes(creatorProfile.uid)) ? "Unfollow" : "Follow"}
+					
 				</Button>
 			</Box>
 		</Flex>

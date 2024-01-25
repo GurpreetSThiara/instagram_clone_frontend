@@ -35,11 +35,12 @@ const usePostComment = () => {
       const postRef = doc(firestore, "posts", postId);
       const commentsCollectionRef = collection(postRef, "comments");
       const newCommentRef = await addDoc(commentsCollectionRef, newComment);
+	 
 
       // await updateDoc(commentsCollectionRef, {
       // 	comments: arrayUnion(newComment),
       // });
-      addComment(postId, newComment);
+      addComment(postId, {...newComment,id:newCommentRef.id});
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
@@ -60,7 +61,10 @@ const usePostComment = () => {
     setIsCommenting(true);
 
     try {
+		console.log("iiiiiiiidddddddddd");
+		console.log(commentId);
       const postRef = doc(firestore, "posts", postId, "comments", commentId);
+	
 
       await updateDoc(postRef, commentObject);
       console.log(comment);
@@ -75,8 +79,40 @@ const usePostComment = () => {
       setIsCommenting(false);
     }
   };
+  const handleCommentReply = async (
+    
+    postId,
+    commentId,
+    repliedComment,
+    
+  ) => {
+    if (isCommenting) return;
+    if (!authUser)
+      return showToast("Error", "You must be logged in to comment", "error");
+    setIsCommenting(true);
 
-  return { isCommenting, handlePostComment, handleUpdateComment };
+    try {
+		console.log("iiiiiiiidddddddddd");
+		console.log(commentId);
+      const commentRef = doc(firestore, "posts", postId, "comments", commentId,);
+      const commentRepliesCollectionRef = collection(commentRef, "commentReplies");
+      const newCommentRef = await addDoc(commentRepliesCollectionRef, repliedComment);
+	
+
+     // await addDoc(postRef, commentObject);
+ 
+      updateLikes(postId, comment, commentObject);
+      // addComment(postId, newComment);
+    } catch (error) {
+      showToast("Error", error.message, "error");
+      console.log(error);
+      console.log("eeeeeeeeeeeeeeeeeeeeeeeee");
+    } finally {
+      setIsCommenting(false);
+    }
+  };
+
+  return { isCommenting, handlePostComment, handleUpdateComment,handleCommentReply };
 };
 
 export default usePostComment;

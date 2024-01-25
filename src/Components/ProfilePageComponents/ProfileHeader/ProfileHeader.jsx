@@ -54,6 +54,20 @@ const ProfileUpperPart = ({
   uid,
 }) => {
   const { isFollowing, handleFollowUser, isUpdating } = useFollowUser(uid);
+  const user = useAuthStore(s=>s.user);
+	const[follow,setFollow]=useState(false);
+
+
+	
+	
+	useEffect(()=>{
+
+    if(user.following.includes(uid)){
+      setFollow('true');
+		
+   }
+	
+	},[]);
 
   return (
     <VStack alignItems="flex-start" gap={2} flex={1}>
@@ -96,7 +110,7 @@ const ProfileUpperPart = ({
               }}
               isLoading={isUpdating}
             >
-              {isFollowing ? "Unfollow" : "Follow"}
+              {follow ? "Unfollow" : "Follow"}
             </Button>
           </Flex>
         )}
