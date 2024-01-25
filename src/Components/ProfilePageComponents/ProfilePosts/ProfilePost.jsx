@@ -8,9 +8,11 @@ import PostFooter from './../../FeedPosts/PostFooter';
 import { useState } from 'react'
 import { color } from 'framer-motion'
 import useAuthStore from '../../../store/authStore'
+import useGetUserProfileById from '../../../hooks/useGetUserProfileById'
 
-const ProfilePost = ({post}) => {
+const ProfilePost = ({post,comments,userProfile}) => {
     const {isOpen, onOpen, onClose} = useDisclosure()
+    
 
     const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
     const onModelMenuOpen = () => setIsModelMenuOpen(true);
@@ -128,9 +130,9 @@ const ProfilePost = ({post}) => {
                     <Flex  borderLeft={"1px solid"} borderColor={"whiteAlpha.300"} flex={1} flexDirection={"column"}  display={{base:"none",md:"flex"}}>
                         <Flex alignItems={"center"} justifyContent={"space-between"} border={"1px solid"} borderColor={"whiteAlpha.300"} p={4}>
                         <Flex alignItems={"center"} gap={4} >
-                            <Avatar src={user.profilePicUrl} size={"sm"} name="User"/>
+                            <Avatar src={userProfile.profilePicUrl} size={"sm"} name="User"/>
                             <Text fontWeight={"bold"} fontSize={12}>
-                                {user.username}
+                                {userProfile.username}
                             </Text>
                         </Flex>
                         <Box onClick={onModelMenuOpen}>
@@ -139,7 +141,7 @@ const ProfilePost = ({post}) => {
                         </Flex>
                    
                         <VStack w={"full"} alignItems={"center"} h={"350px"}  overflowY={"auto"} WebkitOverflowScrolling={"touch"} >
-                            {post.comments && post.comments.map((item,index)=><Box w={'full'} pl={4} pr={4} key={index}><Comment comment={item}/></Box>)}
+                            {comments && comments.map((item,index)=><Box w={'full'} pl={4} pr={4} key={index}><Comment comment={item}/></Box>)}
                             
 
 

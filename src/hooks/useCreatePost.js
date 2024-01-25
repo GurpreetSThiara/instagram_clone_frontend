@@ -26,7 +26,7 @@ const useCreatePost = () => {
 		const newPost = {
 			caption: caption,
 			likes: [],
-			comments: [],
+		    // comments: [],
 			createdAt: Date.now(),
 			createdBy: authUser.uid,
 		};

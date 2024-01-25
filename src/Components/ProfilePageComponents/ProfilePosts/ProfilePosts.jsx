@@ -3,12 +3,16 @@ import React, { useEffect, useState } from 'react'
 import ProfilePost from './ProfilePost';
 import useGetUserPosts from '../../../hooks/useGetUserPosts';
 import useUserProfileStore from '../../../store/userProfileStore';
+import usePostStore from '../../../store/postStore';
+import useGetUserProfileById from '../../../hooks/useGetUserProfileById';
 
-const ProfilePosts = () => {
+const ProfilePosts = ({userProfile}) => {
     // const [isLoading , setIsLoading] = useState(true)
-    const { isLoading, posts } = useGetUserPosts();
+    const { isLoading } = useGetUserPosts();
+    const posts = usePostStore(s=>s.posts);
     const selectedTab = useUserProfileStore(s=>s.selectedTab);
     const { isOpen, onOpen, onClose } = useDisclosure();
+ 
 
 
 
@@ -30,18 +34,8 @@ const ProfilePosts = () => {
           </Skeleton>
         </VStack>)}
 
-        {!isLoading && posts.map((post , index)=>(<Box key={index}><ProfilePost key={index} post={post}/>
-        <Modal onClose={onClose} size={'xl'} isOpen={isOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Image src={post.imageURL}/>
-          </ModalBody>
-         
-        </ModalContent>
-      </Modal>
+        {!isLoading && posts?.map((item , index)=>(<Box key={index}><ProfilePost userProfile={userProfile} key={index} post={item.post} comments={item.comments}/>
+   
         </Box>))
         
         }

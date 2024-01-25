@@ -48,7 +48,7 @@ const ProfilePage = () => {
         direction={"column"}
       >
         <ProfileTabs />
-        <ProfilePosts />
+        <ProfilePosts userProfile={userProfile} />
         <ProfileFeedPosts/>
       </Flex>
     </Container>

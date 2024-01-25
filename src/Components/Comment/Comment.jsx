@@ -1,9 +1,11 @@
+/* eslint-disable react/prop-types */
 import { Avatar, Box, Button, Flex, Skeleton, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { CalcTime } from "../../utils/CalcTime";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import usePostComment from "../../hooks/usePostComment";
+import useAuthStore from "../../store/authStore";
 
 const Comment = ({ comment }) => {
   const { isLoading, userProfile, setUserProfile } = useGetUserProfileById(
@@ -11,29 +13,61 @@ const Comment = ({ comment }) => {
   );
   const [like , setLike] = useState(false);
   const { handleUpdateComment } = usePostComment();
+  const user = useAuthStore(s=>s.user);
+  
 
   const handleLikeComment = ()=>{
+    if(!like){
+    console.log(user)
+    console.log("uuuuuuuuuuuuu")
     setLike(!like);
     if(!comment.likes){
     const newComment ={
         ...comment,
-        "likes":1
+        "likes":1,
+        "likedBy": [user.uid],
     }
     console.log('ifffffffffff');
     console.log(newComment);
-    handleUpdateComment(comment.createdBy,comment.postId,newComment);
+    handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
 }
     else{
         const newComment ={
             ...comment,
-            "likes":comment.likes++
+            "likes":comment.likes+1,
+            "likedBy": [...(comment.likedBy || []), user.uid],
         }
-        handleUpdateComment(comment.createdBy,comment.postId,newComment);
+        console.log(newComment)
+         handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
 
      //   handleUpdateComment(comment.postId,newComment);
   
+    }}else{
+        setLike(!like);
+        if(comment.likedBy){
+
+            if(comment.likedBy.includes(user.uid)){
+               
+                const newComment ={
+                    ...comment,
+                    "likes":comment.likes-1,
+                    "likedBy":  comment.likedBy.filter((id) => id !== user.uid),
+                } 
+                handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
+
+            }
+        }
+
+
     }
   }
+  useEffect(() => {
+    if (comment.likedBy && comment.likedBy.includes(user.uid)) {
+      setLike(true);
+    } else {
+      setLike(false);
+    }
+  }, []);
 
   if (isLoading) {
     return (
