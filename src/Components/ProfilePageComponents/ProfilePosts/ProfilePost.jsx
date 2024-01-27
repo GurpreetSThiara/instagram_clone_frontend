@@ -196,9 +196,12 @@ const ProfilePost = ({ post, comments, userProfile }) => {
                   WebkitOverflowScrolling={"touch"}
                 >
                   {comments &&
-                    comments.map((item, index) => (
+                    comments.comment.map((item, index) => (
                       <Box w={"full"} pl={4} pr={4} key={index}>
-                        <Comment comment={item} />
+                        <Comment comment={item.comment} />
+                        {item.reply && item.reply.isNotEmpty && <Box pl={8}>
+                          <Comment comment={item.reply}/>
+                          </Box>}
                       </Box>
                     ))}
                 </VStack>

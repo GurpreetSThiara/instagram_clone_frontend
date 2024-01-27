@@ -40,10 +40,10 @@ const useGetUserPosts = () => {
           const querySubCollection = query(subCollectionRef);
           const querySnapshotSubCollection = await getDocs(querySubCollection);
           querySnapshotSubCollection.forEach((doc) => {
-            comments.push({ ...doc.data(), id: doc.id });
+            comments.push({comment:{ ...doc.data(), id: doc.id},replies:[] });
           });
 		  
-          resPosts.push({ post: post, comments: {comment:comments,replies:[]} });
+          resPosts.push({ post: post, comments: {comment:comments} });
           comments = [];
         }
         setPosts(resPosts);

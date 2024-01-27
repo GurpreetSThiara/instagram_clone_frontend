@@ -12,6 +12,9 @@ const ProfilePosts = ({userProfile}) => {
     const posts = usePostStore(s=>s.posts);
     const selectedTab = useUserProfileStore(s=>s.selectedTab);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    console.log(posts)
+  
+   
  
 
 
