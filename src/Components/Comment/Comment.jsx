@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Avatar, Box, Button, Flex, Skeleton, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Divider, Flex, Skeleton, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { CalcTime } from "../../utils/CalcTime";
@@ -17,6 +17,8 @@ const Comment = ({ comment }) => {
   const user = useAuthStore(s=>s.user);
   const setIsReplyingComment = usePostStore(s=>s.setIsReplyingComment);
   const setReplyingTo = usePostStore(s=>s.setReplyingTo);
+  const setComment = usePostStore(s=>s.setComment);
+  
 
   
 
@@ -65,6 +67,10 @@ const Comment = ({ comment }) => {
 
     }
   }
+
+  const handleFetchReplies =()=>{
+    
+  }
   useEffect(() => {
     if (comment.likedBy && comment.likedBy.includes(user.uid)) {
       setLike(true);
@@ -87,7 +93,8 @@ const Comment = ({ comment }) => {
   }
 
   return (
-    <Flex
+  <Box>
+      <Flex
       w={"full"}
       display={"flex"}
       alignItems={"flex-start"}
@@ -118,6 +125,7 @@ const Comment = ({ comment }) => {
               </Text>
             </Box>
             <Box backgroundColor={"transparent"}  cursor={'pointer'} onClick={()=>{
+                setComment(comment); 
                 setReplyingTo('@'+userProfile.username);
                 setIsReplyingComment(true);
 
@@ -134,6 +142,17 @@ const Comment = ({ comment }) => {
         {like?<BsHeartFill color="red" />:<BsHeart/>}
       </Box>
     </Flex>
+    <Box pl={4}>
+      {comment.numberOfReplies != 0 &&
+      <Flex alignItems={'center'} gap={3} cursor={'pointer'} onClick={handleFetchReplies}>
+           <Divider w={30}  color={'white'}/>
+           <Text fontSize={12}>
+       view replies( {comment.numberOfReplies})
+      </Text>
+      </Flex>
+      }
+    </Box>
+  </Box>
   );
 };
 

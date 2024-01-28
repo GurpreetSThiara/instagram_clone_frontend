@@ -43,7 +43,7 @@ const useGetUserPosts = () => {
             comments.push({comment:{ ...doc.data(), id: doc.id},replies:[] });
           });
 		  
-          resPosts.push({ post: post, comments: {comment:comments} });
+          resPosts.push({ post: post, comments: comments });
           comments = [];
         }
         setPosts(resPosts);

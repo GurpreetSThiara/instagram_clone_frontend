@@ -17,7 +17,11 @@ const usePostComment = () => {
   const showToast = useShowToast();
   const authUser = useAuthStore((state) => state.user);
   const addComment = usePostStore((state) => state.addComment);
+  const addReplyToComment = usePostStore((state) => state.addReplyToComment);
   const updateLikes = usePostStore((state) => state.updateLikes);
+  const updateNumberOfReplies = usePostStore(
+    (state) => state.updateNumberOfReplies
+  );
 
   const handlePostComment = async (postId, comment) => {
     if (isCommenting) return;
@@ -29,18 +33,18 @@ const usePostComment = () => {
       createdAt: Date.now(),
       createdBy: authUser.uid,
       postId,
+      numberOfReplies: 0,
     };
 
     try {
       const postRef = doc(firestore, "posts", postId);
       const commentsCollectionRef = collection(postRef, "comments");
       const newCommentRef = await addDoc(commentsCollectionRef, newComment);
-	 
 
       // await updateDoc(commentsCollectionRef, {
       // 	comments: arrayUnion(newComment),
       // });
-      addComment(postId, {...newComment,id:newCommentRef.id});
+      addComment(postId, { ...newComment, id: newCommentRef.id });
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
@@ -61,10 +65,9 @@ const usePostComment = () => {
     setIsCommenting(true);
 
     try {
-		console.log("iiiiiiiidddddddddd");
-		console.log(commentId);
+      console.log("iiiiiiiidddddddddd");
+      console.log(commentId);
       const postRef = doc(firestore, "posts", postId, "comments", commentId);
-	
 
       await updateDoc(postRef, commentObject);
       console.log(comment);
@@ -80,11 +83,10 @@ const usePostComment = () => {
     }
   };
   const handleCommentReply = async (
-    
     postId,
-    commentId,
+
     repliedComment,
-    
+    comment
   ) => {
     if (isCommenting) return;
     if (!authUser)
@@ -92,16 +94,38 @@ const usePostComment = () => {
     setIsCommenting(true);
 
     try {
-		console.log("iiiiiiiidddddddddd");
-		console.log(commentId);
-      const commentRef = doc(firestore, "posts", postId, "comments", commentId,);
-      const commentRepliesCollectionRef = collection(commentRef, "commentReplies");
-      const newCommentRef = await addDoc(commentRepliesCollectionRef, repliedComment);
-	
+      console.log("iiiiiiiidddddddddd");
+      console.log(comment.id);
+      const reply = {
+        repliedComment,
+        createdAt: Date.now(),
+        createdBy: authUser.uid,
+        postId,
+      };
+      const commentRef = doc(
+        firestore,
+        "posts",
+        postId,
+        "comments",
+        comment.id
+      );
+      const commentRepliesCollectionRef = collection(
+        commentRef,
+        "commentReplies"
+      );
+      const newCommentRef = await addDoc(commentRepliesCollectionRef, reply);
 
-     // await addDoc(postRef, commentObject);
- 
-      updateLikes(postId, comment, commentObject);
+      const reply_res = { ...repliedComment, id: newCommentRef.id };
+
+      await updateDoc(commentRef, {
+        ...comment,
+        numberOfReplies: comment.numberOfReplies + 1,
+      });
+
+      // await addDoc(postRef, commentObject);
+
+      addReplyToComment(postId, comment.id, reply_res);
+      updateNumberOfReplies(postId, comment);
       // addComment(postId, newComment);
     } catch (error) {
       showToast("Error", error.message, "error");
@@ -112,7 +136,32 @@ const usePostComment = () => {
     }
   };
 
-  return { isCommenting, handlePostComment, handleUpdateComment,handleCommentReply };
+  const handleGetReplies = async()=>{
+
+
+    try{
+      const commentRef = doc(
+        firestore,
+        "posts",
+        postId,
+        "comments",
+        comment.id,
+        "commentReplies"
+
+      );
+      const commentRepliesCollectionRef = collection(
+        commentRef,
+        "commentReplies"
+      );
+    }
+  }
+
+  return {
+    isCommenting,
+    handlePostComment,
+    handleUpdateComment,
+    handleCommentReply,
+  };
 };
 
 export default usePostComment;

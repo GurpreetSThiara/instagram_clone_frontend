@@ -23,14 +23,19 @@ import usePostStore from "../../store/postStore";
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const [reply, setReply] = useState(null);
 
-  const { isCommenting, handlePostComment } = usePostComment();
+
+  const { isCommenting, handlePostComment ,handleCommentReply } = usePostComment();
   const [comment, setComment] = useState("");
   const authUser = useAuthStore((state) => state.user);
   const commentRef = useRef(null);
   const { handleLikePost, isLiked, likes } = useLikePost(post);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
 
   const replyingTo = usePostStore((s) => s.replyingTo);
+  const setReplyingTo = usePostStore((s) => s.setReplyingTo);
+  const selectedComment = usePostStore(s=>s.comment);
+
   
 
   useEffect(() => {
@@ -43,8 +48,19 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   }, [replyingTo]);
 
   const handleSubmitComment = async () => {
-    await handlePostComment(post.id, comment);
-    setComment("");
+    if(replyingTo){
+      handleCommentReply( post.id,
+
+        comment,
+        selectedComment)
+        setReplyingTo(null);
+
+    }else{
+      await handlePostComment(post.id, comment);
+    
+      setComment("");
+    }
+   
   };
 
   return (

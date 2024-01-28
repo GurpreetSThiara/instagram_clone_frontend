@@ -4,9 +4,11 @@ const usePostStore = create((set) => ({
   posts: [],
   isReplyingComment:false,
   replyingTo:null,
+  comment:null,
 
   setIsReplyingComment:(isReplyingComment)=>set({isReplyingComment}),
   setReplyingTo:(replyingTo)=>set({replyingTo}),
+  setComment:(comment)=>set({comment}),
   createPost: (post) => set((state) => ({ posts: [post, ...state.posts] })),
   deletePost: (id) =>
     set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
@@ -77,27 +79,82 @@ set((state) => ({
     return post;
   }),
 })),
-
-updateLikes: (postId, commentId, likesCount) =>
-set((state) => ({
-  posts: state.posts.map((post) => {
-    if (post.post.id === postId) {
-      const updatedComment = post.comments.map((item) => {
+addReplyToComment:(postId, commentId, repliedComment)=>set((state)=>({
+  posts:state.posts.map((post)=>{
+    if(post.post.id === postId){
+      const updatedComments = post.comments.map((item)=>{
         if (item.comment.id === commentId) {
-          return { ...item.comment, likes: likesCount };
+         
+          return{comment: { ...item.comment } , replies:[...item.replies,repliedComment]};
+         
         }
         return item;
       });
+      return {
+        ...post,
+        comments: [...updatedComments]
+      };
+    }
+    return post;
+  })
+})),
+
+updateLikes: (postId, comment, commentObject) =>
+set((state) => ({
+  posts: state.posts.map((post) => {
+    if (post.post.id === postId) {
+      const updatedComments = post.comments.map((item) => {
+        if (item.comment.id === comment.id) {
+          console.log( "uuuuuuullllllllllajscjhdvhdbvkvjkfbjvjfsvbsjvbvbkfvbbbbbbbbbbbbbbbbbbbbb")
+          console.log( { ...item.comment, ...commentObject })
+          return{comment: { ...item.comment, ...commentObject } , replies:[]};
+         
+        }
+       
+        return item;
+      });
+
+      console.log("ittttttteeeeeeemmmmmm")
+      console.log(updatedComments)
 
       return {
         ...post,
-        comments: [...post.comments,updatedComment]
+        comments: [...updatedComments]
       };
     }
     return post;
   }),
 })),
+
+updateNumberOfReplies: (postId, comment) =>
+set((state) => ({
+  posts: state.posts.map((post) => {
+    if (post.post.id === postId) {
+      const updatedComments = post.comments.map((item) => {
+        if (item.comment.id === comment.id) {
+  
+          return{comment: { ...item.comment, numberOfReplies:comment.numberOfReplies+1 } , replies:[...item.replies]};
+         
+        }
+       
+        return item;
+      });
+
+
+
+      return {
+        ...post,
+        comments: [...updatedComments]
+      };
+    }
+    return post;
+  }),
+})),
+
+
 }));
+
+
 
 
 
