@@ -85,7 +85,7 @@ addReplyToComment:(postId, commentId, repliedComment)=>set((state)=>({
       const updatedComments = post.comments.map((item)=>{
         if (item.comment.id === commentId) {
          
-          return{comment: { ...item.comment } , replies:[...item.replies,repliedComment]};
+          return{comment: { ...item.comment } , replies:[...item.replies,...repliedComment]};
          
         }
         return item;

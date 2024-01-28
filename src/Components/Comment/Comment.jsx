@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Avatar, Box, Button, Divider, Flex, Skeleton, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, CircularProgress, Divider, Flex, Progress, Skeleton, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { CalcTime } from "../../utils/CalcTime";
@@ -8,16 +8,17 @@ import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import usePostStore from "../../store/postStore";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment , replies }) => {
   const { isLoading, userProfile, setUserProfile } = useGetUserProfileById(
     comment.createdBy
   );
   const [like , setLike] = useState(false);
-  const { handleUpdateComment } = usePostComment();
+  const { handleUpdateComment , handleGetReplies } = usePostComment();
   const user = useAuthStore(s=>s.user);
   const setIsReplyingComment = usePostStore(s=>s.setIsReplyingComment);
   const setReplyingTo = usePostStore(s=>s.setReplyingTo);
   const setComment = usePostStore(s=>s.setComment);
+  const [replyTapped, setReplyTapped] = useState(false); 
   
 
   
@@ -69,7 +70,8 @@ const Comment = ({ comment }) => {
   }
 
   const handleFetchReplies =()=>{
-    
+    setReplyTapped(true);
+    handleGetReplies(comment.postId,comment.id);
   }
   useEffect(() => {
     if (comment.likedBy && comment.likedBy.includes(user.uid)) {
@@ -143,14 +145,16 @@ const Comment = ({ comment }) => {
       </Box>
     </Flex>
     <Box pl={4}>
-      {comment.numberOfReplies != 0 &&
+ {!replyTapped?  comment.numberOfReplies != 0 ?
+
       <Flex alignItems={'center'} gap={3} cursor={'pointer'} onClick={handleFetchReplies}>
            <Divider w={30}  color={'white'}/>
            <Text fontSize={12}>
        view replies( {comment.numberOfReplies})
       </Text>
-      </Flex>
-      }
+      </Flex>:null
+      :
+      replies.length<1?<CircularProgress/>:<Text>{replies.repliedComment}</Text>}
     </Box>
   </Box>
   );

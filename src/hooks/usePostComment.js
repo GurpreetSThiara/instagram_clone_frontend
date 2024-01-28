@@ -2,10 +2,13 @@ import { useState } from "react";
 import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 import {
+  Query,
   addDoc,
   arrayUnion,
   collection,
   doc,
+  getDocs,
+  query,
   updateDoc,
 } from "firebase/firestore";
 
@@ -136,23 +139,29 @@ const usePostComment = () => {
     }
   };
 
-  const handleGetReplies = async()=>{
+  const handleGetReplies = async(postId,commentId)=>{
 
 
     try{
-      const commentRef = doc(
-        firestore,
-        "posts",
-        postId,
-        "comments",
-        comment.id,
-        "commentReplies"
-
-      );
       const commentRepliesCollectionRef = collection(
-        commentRef,
-        "commentReplies"
+        firestore,
+        "posts",         // Collection: posts
+        postId,           // Document ID: postId
+        "comments",       // Collection: comments
+        commentId,        // Document ID: commentId
+        "commentReplies"  // Collection: commentReplies
       );
+      const q = query(commentRepliesCollectionRef);
+      const querySnapshot = await getDocs(q);
+     const replies = [];
+     querySnapshot.forEach((doc) => {
+      replies.push({ ...doc.data(), id: doc.id });
+     });
+
+     addReplyToComment(postId, commentId, replies)
+    }
+    catch(e){
+     console.log(e)
     }
   }
 
@@ -161,6 +170,7 @@ const usePostComment = () => {
     handlePostComment,
     handleUpdateComment,
     handleCommentReply,
+    handleGetReplies
   };
 };
 
