@@ -19,6 +19,8 @@ import useLikePost from "../../hooks/useLikePost";
 import usePostComment from "../../hooks/usePostComment";
 import { CalcTime } from "../../utils/CalcTime";
 import usePostStore from "../../store/postStore";
+import { BsFillBookmarkFill } from "react-icons/bs";
+import { BiBookmark } from "react-icons/bi";
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const [reply, setReply] = useState(null);
@@ -65,7 +67,8 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
 
   return (
     <Box mb={10} marginTop={"auto"}>
-      <Flex alignItems={"center"} gap={4} w={"full"} pt={0} mb={2} mt={4}>
+      <Flex alignItems={"center"} justifyContent={'space-between'} gap={4} w={"full"} pt={0} mb={2} mt={4}>
+        <Flex alignItems={"center"} gap={4}>
         <Box onClick={handleLikePost} cursor={"pointer"} fontSize={18}>
           {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
         </Box>
@@ -76,6 +79,15 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
           onClick={() => commentRef.current.focus()}
         >
           <CommentLogo />
+        </Box>
+        </Flex>
+        <Box
+          cursor={"pointer"}
+          fontSize={18}
+          onClick={() => commentRef.current.focus()}
+        >
+          <BiBookmark />
+          {/* <BsFillBookmarkFill /> */}
         </Box>
       </Flex>
       <Text fontWeight={600} fontSize={"sm"}>

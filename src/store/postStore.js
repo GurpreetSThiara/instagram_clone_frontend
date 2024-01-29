@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 const usePostStore = create((set) => ({
   posts: [],
+  savedPosts:[],
   isReplyingComment:false,
   replyingTo:null,
   comment:null,
@@ -13,6 +14,10 @@ const usePostStore = create((set) => ({
   deletePost: (id) =>
     set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
   setPosts: (posts) => set({ posts }),
+  setSavedPosts: (savedPosts) => set((state)=>({
+    savedPosts:[...state.savedPosts,savedPosts]
+  })),
+
   // addComment: (postId, comment) =>
   //   set((state) => ({
   //     posts: state.posts.map((post) => {
@@ -79,22 +84,31 @@ set((state) => ({
     return post;
   }),
 })),
-addReplyToComment:(postId, commentId, repliedComment)=>set((state)=>({
+addReplyToComment:(postId, commentId, reply_res)=>set((state)=>({
   posts:state.posts.map((post)=>{
+    console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+
     if(post.post.id === postId){
       const updatedComments = post.comments.map((item)=>{
         if (item.comment.id === commentId) {
          
-          return{comment: { ...item.comment } , replies:[...item.replies,...repliedComment]};
+          return{comment: { ...item.comment } , replies:[...reply_res]};
          
         }
         return item;
       });
+      console.log("postpostpost")
+      console.log({
+        ...post,
+        comments: [...updatedComments]
+      })
       return {
         ...post,
         comments: [...updatedComments]
       };
     }
+    console.log("postpostpost")
+    console.log(post)
     return post;
   })
 })),

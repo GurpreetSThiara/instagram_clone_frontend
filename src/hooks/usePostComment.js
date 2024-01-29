@@ -118,16 +118,20 @@ const usePostComment = () => {
       );
       const newCommentRef = await addDoc(commentRepliesCollectionRef, reply);
 
-      const reply_res = { ...repliedComment, id: newCommentRef.id };
+      const reply_res = { ...reply, id: newCommentRef.id };
+      console.log(reply_res);
+      console.log("replyresultttt");
 
       await updateDoc(commentRef, {
         ...comment,
         numberOfReplies: comment.numberOfReplies + 1,
       });
 
+      handleGetReplies(postId,comment.id);
+
       // await addDoc(postRef, commentObject);
 
-      addReplyToComment(postId, comment.id, reply_res);
+      // addReplyToComment(postId, comment.id, [reply_res]);
       updateNumberOfReplies(postId, comment);
       // addComment(postId, newComment);
     } catch (error) {
@@ -157,6 +161,7 @@ const usePostComment = () => {
      querySnapshot.forEach((doc) => {
       replies.push({ ...doc.data(), id: doc.id });
      });
+  
 
      addReplyToComment(postId, commentId, replies)
     }

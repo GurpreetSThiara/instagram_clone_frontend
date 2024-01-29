@@ -198,7 +198,7 @@ const ProfilePost = ({ post, comments, userProfile }) => {
                   {comments &&
                     comments.map((item, index) => (
                       <Box w={"full"} pl={4} pr={4} key={index}>
-                        <Comment comment={item.comment} replies={item.replies} />
+                        <Comment comment={item.comment} replies={item} />
                         
                       </Box>
                     ))}
