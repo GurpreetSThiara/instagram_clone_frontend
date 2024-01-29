@@ -3,6 +3,7 @@ import { create } from "zustand";
 const usePostStore = create((set) => ({
   posts: [],
   savedPosts:[],
+  savedPostsList:[],
   isReplyingComment:false,
   replyingTo:null,
   comment:null,
@@ -16,6 +17,9 @@ const usePostStore = create((set) => ({
   setPosts: (posts) => set({ posts }),
   setSavedPosts: (savedPosts) => set((state)=>({
     savedPosts:[...state.savedPosts,savedPosts]
+  })),
+  setSavedPostsList: (savedPosts) => set((state)=>({
+    savedPostsList:[...state.savedPostsList,savedPosts]
   })),
 
   // addComment: (postId, comment) =>

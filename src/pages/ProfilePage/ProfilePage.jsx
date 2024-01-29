@@ -6,11 +6,15 @@ import { useParams } from "react-router-dom";
 import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
 import { Link as RouterLink } from "react-router-dom";
 import ProfileFeedPosts from "../../Components/ProfilePageComponents/ProfileFeedPosts/ProfileFeedPosts";
+import ProfileSavedPosts from "../../Components/ProfilePageComponents/ProfileSavedPosts/savedPosts";
+import useUserProfileStore from "../../store/userProfileStore";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const { isLoading, userProfile } = useGetUserProfileByUsername(username);
   const userNotFound = !isLoading && !userProfile;
+  const selectedTab = useUserProfileStore(s=>s.selectedTab);
+
 
   if (userNotFound) return <UserNotFound />;
 
@@ -50,6 +54,7 @@ const ProfilePage = () => {
         <ProfileTabs />
         <ProfilePosts userProfile={userProfile} />
         <ProfileFeedPosts/>
+       {selectedTab === 'saved' && <ProfileSavedPosts/>} 
       </Flex>
     </Container>
   );

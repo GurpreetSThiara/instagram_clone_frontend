@@ -21,6 +21,7 @@ import { CalcTime } from "../../utils/CalcTime";
 import usePostStore from "../../store/postStore";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { BiBookmark } from "react-icons/bi";
+import useSavedPost from "../../hooks/useSavedPost";
 
 const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const [reply, setReply] = useState(null);
@@ -32,11 +33,19 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const commentRef = useRef(null);
   const { handleLikePost, isLiked, likes } = useLikePost(post);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { savePost, getSavedPosts, isLoading } = useSavedPost();
+  const [isSaved , setIsSaved] = useState(false);
   
 
   const replyingTo = usePostStore((s) => s.replyingTo);
   const setReplyingTo = usePostStore((s) => s.setReplyingTo);
   const selectedComment = usePostStore(s=>s.comment);
+
+  const handleSavePost = () => {
+    setIsSaved(true);
+    console.log("saved posts")
+    savePost(authUser.uid,post.id);
+  }
 
   
 
@@ -81,12 +90,14 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
           <CommentLogo />
         </Box>
         </Flex>
+        
         <Box
           cursor={"pointer"}
           fontSize={18}
-          onClick={() => commentRef.current.focus()}
+          onClick={handleSavePost}
         >
-          <BiBookmark />
+         {!isSaved && <BiBookmark />} 
+         {isSaved && <BsFillBookmarkFill />} 
           {/* <BsFillBookmarkFill /> */}
         </Box>
       </Flex>
