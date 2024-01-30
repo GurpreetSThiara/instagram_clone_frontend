@@ -9,7 +9,7 @@ import useAuthStore from "../../store/authStore";
 import usePostStore from "../../store/postStore";
 
 const Reply = ({ reply  }) => {
-    console.log(reply)
+  
     if(!reply){
         return (
             // Display loading skeleton while data is being fetched
@@ -30,16 +30,14 @@ const Reply = ({ reply  }) => {
   const setReplyingTo = usePostStore(s=>s.setReplyingTo);
   const setComment = usePostStore(s=>s.setComment);
   const [replyTapped, setReplyTapped] = useState(false);
-//   console.log(replies) 
-//   console.log("replies") 
+
   const {userProfile , isLoading} = useGetUserProfileById(reply.createdBy);
 
   
 
   const handleLikeComment = ()=>{
     if(!like){
-    console.log(user)
-    console.log("uuuuuuuuuuuuu")
+
     setLike(!like);
     if(!reply.likes){
     const newComment ={
@@ -47,8 +45,7 @@ const Reply = ({ reply  }) => {
         "likes":1,
         "likedBy": [user.uid],
     }
-    console.log('ifffffffffff');
-    console.log(newComment);
+
     // handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
 }
     else{
@@ -57,7 +54,6 @@ const Reply = ({ reply  }) => {
             "likes":reply.likes+1,
             "likedBy": [...(reply.likedBy || []), user.uid],
         }
-        console.log(newComment)
         //  handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
 
      //   handleUpdateComment(comment.postId,newComment);

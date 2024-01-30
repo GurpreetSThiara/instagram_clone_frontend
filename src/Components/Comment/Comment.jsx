@@ -20,9 +20,7 @@ const Comment = ({ comment , replies }) => {
   const setReplyingTo = usePostStore(s=>s.setReplyingTo);
   const setComment = usePostStore(s=>s.setComment);
   const [replyTapped, setReplyTapped] = useState(false);
-  console.log(replies) 
-  console.log("replies") 
-  
+
 
   
 

@@ -10,7 +10,7 @@ const useSavedPost =  () => {
     const [isLoading , setLoading] =  useState(false);
     const {  getUserPost , userProfile } = useGetUserPost();
 
-    const savePost = async (userId, postId) => {
+    const savePost = async (userId, postId, isSaving) => {
         setLoading(true);
         const userRef = collection(firestore, "users", userId , "savedPosts");
         // const savedPostsRef = collection(userRef, "savedPosts");
@@ -20,15 +20,17 @@ const useSavedPost =  () => {
             const q = query(userRef);
 
             const savedPostsDoc = await getDocs(q);
-          
-            if (savedPostsDoc.exists) {
+            console.log(savedPostsDoc.docs);
+            console.log("ddddddddddddddddddddd");
+           //resolve error here
+            if (!savedPostsDoc.empty) {
                 // Document exists, update the postIds array
-                const currentPostIds = savedPostsDoc.data() || [];
-                const updatedPostIds = [...currentPostIds, postId];
+                const currentPostIds = savedPostsDoc.docs[0].data().postIds || [];
+                const updatedPostIds =isSaving? [...currentPostIds, postId]:currentPostIds.includes(postId)?  currentPostIds.filter(postId => postId !== postId):currentPostIds;
 
         
                 // Update the document with the new postIds array
-                await updateDoc(userRef, {
+                await updateDoc(savedPostsDoc.docs[0].ref, {
                     postIds: updatedPostIds,
                 });
 
@@ -54,24 +56,34 @@ const useSavedPost =  () => {
     }
     };
 
-    const getSavedPosts = async (userId)=>{
-        console.log("ggggggggggggggggggggggggggggggggggggg")
+    const getSavedPosts = async (userId ,getPostsById )=>{
         setLoading(true);
         const ref = collection(firestore, "users", userId ,"savedPosts");
+
         try{
             const querySnapshot = await getDocs(ref);
+
             const posts = [];
             
             // const querySnapshot = savedPostsDoc.data().postIds;
-            if (querySnapshot.exists) {
+            if (querySnapshot) {
                 querySnapshot.forEach((doc) => {
-                    posts.push({ ...doc.data(), id: doc.id });
+                    posts.push( ...doc.data().postIds
+                    );
                   });
+                  console.log(posts)
+                  console.log("postsssssssssssssss")
 
-                  for(let id of posts){
+                  if(getPostsById){
+                    for(let id of posts){
+                        console.log("id")
 
-                    getUserPost(id);
-                }
+                    
+
+                   let x=   await  getUserPost(id);
+                    }
+                  }  
+               
          
             }
 

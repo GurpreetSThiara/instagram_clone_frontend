@@ -37,26 +37,34 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const [isSaved , setIsSaved] = useState(false);
   
 
-  const replyingTo = usePostStore((s) => s.replyingTo);
+  const replyingTo = usePostStore((s) => s.replyingTo); 
   const setReplyingTo = usePostStore((s) => s.setReplyingTo);
   const selectedComment = usePostStore(s=>s.comment);
+  const savedPosts = usePostStore(s=>s.savedPosts);
 
   const handleSavePost = () => {
-    setIsSaved(true);
     console.log("saved posts")
-    savePost(authUser.uid,post.id);
+    savePost(authUser.uid,post.id, !isSaved);
+    setIsSaved(!isSaved);
+
   }
 
-  
+  useEffect(()=>{
+    if(savedPosts.includes(post.id)){
+      isSaved(true);
+      console.log('fffffffffffffffffffffffffffffffffffffffffffff')
+    }
+  },[])
 
   useEffect(() => {
-    console.log(replyingTo);
-    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+  
+    // getSavedPosts(authUser.uid,false);
     if (replyingTo) {
       setReply(replyingTo);
       commentRef.current.focus();
     }
-  }, [replyingTo]);
+
+  }, []);
 
   const handleSubmitComment = async () => {
     if(replyingTo){

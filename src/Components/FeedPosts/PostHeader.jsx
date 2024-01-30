@@ -13,8 +13,7 @@ const PostHeader = ({ post, creatorProfile }) => {
 	
 	const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(post.createdBy);
 	useEffect(()=>{
-		console.log(creatorProfile);
-		console.log("pppppppppppppppppppppppppppppppprrrrrrrrrrrrrrrrrrrrrrrrr");
+
 		// if(user.uid === creatorProfile.id){
 		// 	setShowFolllow(false);
 		// }else{

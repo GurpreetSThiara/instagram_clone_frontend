@@ -24,6 +24,7 @@ const Sidebar = () => {
   const { handleLogOut, isLoggingOut } = useLogOut();
   const [shrinkedSideBar, setShrinkedSidebar] = useState(false);
   const [searchSelected, setSearchSelected] = useState(false);
+  const [messagesSelected, setMessagesSelected] = useState(false);
   const [notifcationsSelected, setNotifcationsSelected] = useState(false);
   const navigate = useNavigate();
 
@@ -200,6 +201,8 @@ const Sidebar = () => {
         </Flex>
       </Box>
       {searchSelected ? <SearchComponent /> : null}
+      {messagesSelected ? <SearchComponent /> : null}
+
     </Flex>
   ) : (
     <Flex

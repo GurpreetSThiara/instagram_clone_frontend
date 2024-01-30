@@ -8,15 +8,19 @@ import { Link as RouterLink } from "react-router-dom";
 import ProfileFeedPosts from "../../Components/ProfilePageComponents/ProfileFeedPosts/ProfileFeedPosts";
 import ProfileSavedPosts from "../../Components/ProfilePageComponents/ProfileSavedPosts/savedPosts";
 import useUserProfileStore from "../../store/userProfileStore";
+import useAuthStore from "../../store/authStore";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const { isLoading, userProfile } = useGetUserProfileByUsername(username);
   const userNotFound = !isLoading && !userProfile;
   const selectedTab = useUserProfileStore(s=>s.selectedTab);
+  const user = useAuthStore(s=>s.user);
 
 
   if (userNotFound) return <UserNotFound />;
+
+  if(!userProfile) return <></>
 
   return (
     <Container
@@ -41,6 +45,7 @@ const ProfilePage = () => {
             following={56}
           />
         )}
+        {isLoading && <ProfileHeaderSkeleton/>}
       </Flex>
 
       <Flex
@@ -51,10 +56,10 @@ const ProfilePage = () => {
         borderColor={"whiteAlpha.300"}
         direction={"column"}
       >
-        <ProfileTabs />
+        <ProfileTabs  visitingOwnProfile={user.uid === userProfile.uid} />
         <ProfilePosts userProfile={userProfile} />
         <ProfileFeedPosts/>
-       {selectedTab === 'saved' && <ProfileSavedPosts/>} 
+       {user.uid === userProfile.uid && selectedTab === 'saved' && <ProfileSavedPosts/>} 
       </Flex>
     </Container>
   );

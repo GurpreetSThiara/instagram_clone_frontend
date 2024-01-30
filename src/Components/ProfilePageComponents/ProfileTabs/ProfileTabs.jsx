@@ -4,7 +4,7 @@ import {BsBookmark, BsGrid3X3, BsPersonSquare, BsSuitHeart,BsViewList} from 'rea
 import useUserProfileStore from '../../../store/userProfileStore';
 
 
-const ProfileTabs = () => {
+const ProfileTabs = ({visitingOwnProfile}) => {
     const [lastClicked, setLastClicked] = useState('posts');
     const setSelectedTab = useUserProfileStore(s=>s.setSelectedTab);
 
@@ -35,12 +35,12 @@ const ProfileTabs = () => {
             </Box>
             <Text fontSize={12} display={{base:"none", sm:"block"}}>Feed</Text>
         </Flex>
-        <Flex  onClick={()=>handleTabClick("saved")} borderTop={lastClicked==="saved"?"1px solid white":null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
+       {visitingOwnProfile && <Flex  onClick={()=>handleTabClick("saved")} borderTop={lastClicked==="saved"?"1px solid white":null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
             <Box fontSize={20}>
                 <BsBookmark/>
             </Box>
             <Text fontSize={12} display={{base:"none", sm:"block"}}>Saved</Text>
-        </Flex>
+        </Flex> } 
         <Flex  onClick={()=>handleTabClick("tagged")} borderTop={lastClicked==="tagged"?"1px solid white":null}  alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
             <Box fontSize={20}>
                 <BsPersonSquare  fontWeight={"bold"}/>

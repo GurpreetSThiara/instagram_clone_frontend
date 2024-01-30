@@ -19,7 +19,7 @@ const usePostStore = create((set) => ({
     savedPosts:[...state.savedPosts,savedPosts]
   })),
   setSavedPostsList: (savedPosts) => set((state)=>({
-    savedPostsList:[...state.savedPostsList,savedPosts]
+    savedPostsList:[...state.savedPostsList,...savedPosts]
   })),
 
   // addComment: (postId, comment) =>
