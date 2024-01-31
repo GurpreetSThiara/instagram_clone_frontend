@@ -11,14 +11,15 @@ const useGetUserPost = () => {
 
   const showToast = useShowToast();
 
-  const getUserPost = async (postId) => {
+  const getUserPost = async ({postId,isSavedPostsFetching}) => {
     setIsLoading(true);
     setUserProfile(null);
     try {
       const querySnapshot = await getDoc(doc(firestore, "posts", postId));
       if (querySnapshot.exists()) {
         // setUserProfile(posts);
-        setSavedPostsList([{post:querySnapshot.data(),comments:[]}]);
+        console.log("yyyyyyyyyyyyyyyyyyyyyyyyyy")
+        isSavedPostsFetching?  setSavedPostsList({post:querySnapshot.data(),comments:[]}):null;
       }
 
     } catch (error) {

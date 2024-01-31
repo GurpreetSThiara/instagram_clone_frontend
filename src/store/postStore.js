@@ -18,9 +18,14 @@ const usePostStore = create((set) => ({
   setSavedPosts: (savedPosts) => set((state)=>({
     savedPosts:[...state.savedPosts,savedPosts]
   })),
-  setSavedPostsList: (savedPosts) => set((state)=>({
-    savedPostsList:[...state.savedPostsList,...savedPosts]
-  })),
+  setSavedPostsList: (savedPosts) => set((state) => {
+    console.log("oooooooooooooooooooooooooooooooooo");
+    if (state.savedPostsList.includes(savedPosts)) {
+      return { savedPostsList: state.savedPostsList }; // Return the existing state
+    }
+    return { savedPostsList: [...state.savedPostsList, savedPosts] }; // Return the updated state
+  }),
+  
 
   // addComment: (postId, comment) =>
   //   set((state) => ({

@@ -29,6 +29,9 @@ import searchResultsStore from "../store/searchResultsStore";
 import { useNavigate } from "react-router-dom";
 import { BsHeart } from "react-icons/bs";
 import useAuthStore from "../store/authStore";
+import useNotificationStore from "../store/notificationsStore";
+import { collection, onSnapshot } from "firebase/firestore";
+import { firestore } from "../firebase/firebase";
 
 const HomePage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
@@ -40,6 +43,7 @@ const HomePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const user = useAuthStore(s=>s.user)
+  const addNotification = useNotificationStore((state) => state.addNotification);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -54,6 +58,29 @@ const HomePage = () => {
       searchUsers(e);
     }
   };
+
+  useEffect(() => {
+    // Function to start listening for notifications
+    const startNotificationsListener = () => {
+      const notificationsRef = collection(firestore, 'users', user.uid, 'notifications');
+      const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            const newNotification = change.doc.data();
+            addNotification(newNotification);
+          }
+        });
+      });
+
+      return unsubscribe; // Cleanup on component unmount
+    };
+
+    // Start listening for notifications
+    const unsubscribe = startNotificationsListener();
+
+    // Cleanup function (unsubscribe) when the component unmounts
+    return () => unsubscribe();
+  }, [addNotification]);
 
   useEffect(() => {
     const handleResize = () => {

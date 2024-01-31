@@ -9,6 +9,7 @@ import ProfileFeedPosts from "../../Components/ProfilePageComponents/ProfileFeed
 import ProfileSavedPosts from "../../Components/ProfilePageComponents/ProfileSavedPosts/savedPosts";
 import useUserProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authStore";
+import useSavedPost from "../../hooks/useSavedPost";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -16,6 +17,7 @@ const ProfilePage = () => {
   const userNotFound = !isLoading && !userProfile;
   const selectedTab = useUserProfileStore(s=>s.selectedTab);
   const user = useAuthStore(s=>s.user);
+
 
 
   if (userNotFound) return <UserNotFound />;

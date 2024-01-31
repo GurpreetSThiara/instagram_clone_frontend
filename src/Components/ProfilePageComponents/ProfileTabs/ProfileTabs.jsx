@@ -2,13 +2,22 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { useState } from 'react';
 import {BsBookmark, BsGrid3X3, BsPersonSquare, BsSuitHeart,BsViewList} from 'react-icons/bs'
 import useUserProfileStore from '../../../store/userProfileStore';
+import useSavedPost from '../../../hooks/useSavedPost';
+import useAuthStore from '../../../store/authStore';
 
 
 const ProfileTabs = ({visitingOwnProfile}) => {
+    
+    const { savePost, getSavedPosts } = useSavedPost();
+    const user = useAuthStore(s=>s.user);
+
     const [lastClicked, setLastClicked] = useState('posts');
     const setSelectedTab = useUserProfileStore(s=>s.setSelectedTab);
 
     const handleTabClick = (tabName) => {
+        if(tabName === "saved"){
+            getSavedPosts(user.uid , true);
+        }
       setLastClicked(tabName);
       setSelectedTab(tabName);
       // Add logic to handle tab clicks if needed

@@ -80,7 +80,7 @@ const useSavedPost =  () => {
 
                     
 
-                   let x=   await  getUserPost(id);
+                   let x=   await  getUserPost({isSavedPostsFetching:true,postId:id});
                     }
                   }  
                

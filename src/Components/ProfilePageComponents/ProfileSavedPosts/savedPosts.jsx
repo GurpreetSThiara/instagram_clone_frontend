@@ -14,9 +14,9 @@ const ProfileSavedPosts = () => {
   const savedPostsList = usePostStore((s) => s.savedPostsList);
 //   console.log(savedPostsList);
 
-  useEffect(() => {
-    getSavedPosts(user.uid , true);
-  }, []);
+  // useEffect(() => {
+  //   getSavedPosts(user.uid , true);
+  // }, []);
   if (savedPostsList.length === 0) {
     return <Spinner isLoading={true} />;
   }

@@ -19,6 +19,7 @@ import Notifications from "./SidebarItems/Notifications";
 import Search from "./SidebarItems/Search";
 import Profile from "./SidebarItems/Profile";
 import SearchComponent from "./SearchComponent";
+import NotificationsComponent from "./NotificationsComponent/NotificationsComponent";
 
 const Sidebar = () => {
   const { handleLogOut, isLoggingOut } = useLogOut();
@@ -202,6 +203,7 @@ const Sidebar = () => {
       </Box>
       {searchSelected ? <SearchComponent /> : null}
       {messagesSelected ? <SearchComponent /> : null}
+      {notifcationsSelected && <NotificationsComponent/>}
 
     </Flex>
   ) : (
