@@ -14,6 +14,7 @@ import {
 
 import usePostStore from "../store/postStore";
 import { firestore } from "../Firebase/Firebase";
+import useNotifications from "./useNotifications";
 
 const usePostComment = () => {
   const [isCommenting, setIsCommenting] = useState(false);
@@ -22,11 +23,13 @@ const usePostComment = () => {
   const addComment = usePostStore((state) => state.addComment);
   const addReplyToComment = usePostStore((state) => state.addReplyToComment);
   const updateLikes = usePostStore((state) => state.updateLikes);
+  const { notifyComment } = useNotifications();
+
   const updateNumberOfReplies = usePostStore(
     (state) => state.updateNumberOfReplies
   );
 
-  const handlePostComment = async (postId, comment) => {
+  const handlePostComment = async (postId, comment , postOwnerId) => {
     if (isCommenting) return;
     if (!authUser)
       return showToast("Error", "You must be logged in to comment", "error");
@@ -43,6 +46,13 @@ const usePostComment = () => {
       const postRef = doc(firestore, "posts", postId);
       const commentsCollectionRef = collection(postRef, "comments");
       const newCommentRef = await addDoc(commentsCollectionRef, newComment);
+      notifyComment({
+        commentByUserId:authUser.uid,
+        comment:newComment.comment,
+        postId:newComment.postId,
+        postOwnerId:postOwnerId,
+      });
+    
 
       // await updateDoc(commentsCollectionRef, {
       // 	comments: arrayUnion(newComment),

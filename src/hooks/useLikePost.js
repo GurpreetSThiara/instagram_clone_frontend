@@ -14,6 +14,7 @@ const useLikePost = (post) => {
   const showToast = useShowToast();
   const { notifyLike,removeNotification } = useNotifications();
 
+
   const handleLikePost = async () => {
     if (isUpdating) return;
     if (!authUser)
@@ -33,10 +34,12 @@ const useLikePost = (post) => {
         likedByUserId: authUser.uid,
         postId: post.id,
         postOwnerId: post.createdBy,
+        type:"like"
       }):removeNotification({
         likedByUserId: authUser.uid,
         postId: post.id,
         postOwnerId: post.createdBy,
+    
       });
 
       setIsLiked(!isLiked);

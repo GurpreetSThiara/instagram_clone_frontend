@@ -205,7 +205,7 @@ const ProfilePost = ({ post, comments, userProfile }) => {
                 </VStack>
                 <Divider my={4} bg={"gray.8000"} />
                 <Box p={4}>
-                  <PostFooter isProfilePage={true} post={post} user={user} />
+                  <PostFooter isProfilePage={true} post={post} user={user} creatorProfile={userProfile} />
                 </Box>
               </Flex>
             </Flex>

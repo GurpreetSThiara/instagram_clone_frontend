@@ -2,7 +2,8 @@ import { Avatar, Box, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import useSearchUsers from '../../../hooks/useSearchUsers';
 import useNotificationStore from '../../../store/notificationsStore';
-import Notification from './Notification/Notification';
+import LikeNotification from './Notification/Notification';
+import CommentNotification from './Notification/CommentNotification';
 
 const NotificationsComponent = () => {
     const { isLoading, searchUsers } = useSearchUsers();
@@ -32,10 +33,11 @@ const NotificationsComponent = () => {
         Notifications
       </Text>
     </Box>
-    <Box h={40} p={"0px 16px"}>
+    <Box h={40}>
         {notifications.length !== 0 && notifications.map((notification , index)=>{
             return <Box key={index}>
-              <Notification id={notification.likedBy} postId={notification.postId}/>
+              {notification.type === "like" && <LikeNotification notification={notification}/>}
+              {notification.type === "comment" && <CommentNotification notification={notification}/>}
                 
             </Box>
         })}

@@ -75,7 +75,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
         setReplyingTo(null);
 
     }else{
-      await handlePostComment(post.id, comment);
+      await handlePostComment(post.id, comment,creatorProfile.uid);
     
       setComment("");
     }

@@ -128,6 +128,8 @@ const Sidebar = () => {
                 onClick={() => {
                   setShrinkedSidebar(false);
                   setSearchSelected(false);
+                  setNotifcationsSelected(false);
+
 
                 }}
               >
@@ -149,6 +151,8 @@ const Sidebar = () => {
                 onClick={() => {
                   setShrinkedSidebar(false);
                   setSearchSelected(false);
+                  setNotifcationsSelected(false);
+
 
                 }}
               >
@@ -170,6 +174,8 @@ const Sidebar = () => {
                 onClick={() => {
                   setShrinkedSidebar(false);
                   setSearchSelected(false);
+                  setNotifcationsSelected(false);
+
 
                 }}
               >

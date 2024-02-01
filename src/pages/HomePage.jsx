@@ -44,6 +44,7 @@ const HomePage = () => {
   const finalRef = useRef(null);
   const user = useAuthStore(s=>s.user)
   const addNotification = useNotificationStore((state) => state.addNotification);
+  const removeNotifications = useNotificationStore((state) => state.removeNotifications);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -62,11 +63,16 @@ const HomePage = () => {
   useEffect(() => {
     // Function to start listening for notifications
     const startNotificationsListener = () => {
+      removeNotifications();
       const notificationsRef = collection(firestore, 'users', user.uid, 'notifications');
       const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
             const newNotification = change.doc.data();
+            
+            console.log(newNotification);
+            console.log("nnnnnnnnnnnnnnnnnnnnnnnn");
+
             addNotification(newNotification);
           }
         });

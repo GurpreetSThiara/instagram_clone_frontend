@@ -7,6 +7,8 @@ const useNotifications = () => {
             "type":"like",
              "likedBy":likedByUserId,
              "postId":postId,
+             
+
              createdAt: Date.now(),
           
           }
@@ -14,6 +16,21 @@ const useNotifications = () => {
 
         
     }
+    const notifyComment =async ({commentByUserId,postId,postOwnerId,comment}) =>{
+      const notification = {
+        "type":"comment",
+         "commentBy":commentByUserId,
+         "postId":postId,
+         "comment":comment,
+         
+
+         createdAt: Date.now(),
+      
+      }
+    const notificationRef =   await addDoc(collection(firestore, 'users', postOwnerId, 'notifications'),notification );
+
+    
+}
     const removeNotification = async ({ postId, postOwnerId, likedByUserId }) => {
         try {
           const notificationQuery = collection(
@@ -37,7 +54,9 @@ const useNotifications = () => {
           console.error('Error removing notification:', error);
         }
       };
-  return {notifyLike , removeNotification}
+
+
+  return {notifyLike , removeNotification , notifyComment}
 }
 
 export default useNotifications
