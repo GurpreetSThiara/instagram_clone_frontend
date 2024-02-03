@@ -23,13 +23,14 @@ const usePostComment = () => {
   const addComment = usePostStore((state) => state.addComment);
   const addReplyToComment = usePostStore((state) => state.addReplyToComment);
   const updateLikes = usePostStore((state) => state.updateLikes);
+  const updateReplyLikes = usePostStore((state) => state.updateReplyLikes);
   const { notifyComment } = useNotifications();
 
   const updateNumberOfReplies = usePostStore(
     (state) => state.updateNumberOfReplies
   );
 
-  const handlePostComment = async (postId, comment , postOwnerId) => {
+  const handlePostComment = async (postId, comment, postOwnerId) => {
     if (isCommenting) return;
     if (!authUser)
       return showToast("Error", "You must be logged in to comment", "error");
@@ -47,12 +48,11 @@ const usePostComment = () => {
       const commentsCollectionRef = collection(postRef, "comments");
       const newCommentRef = await addDoc(commentsCollectionRef, newComment);
       notifyComment({
-        commentByUserId:authUser.uid,
-        comment:newComment.comment,
-        postId:newComment.postId,
-        postOwnerId:postOwnerId,
+        commentByUserId: authUser.uid,
+        comment: newComment.comment,
+        postId: newComment.postId,
+        postOwnerId: postOwnerId,
       });
-    
 
       // await updateDoc(commentsCollectionRef, {
       // 	comments: arrayUnion(newComment),
@@ -137,7 +137,7 @@ const usePostComment = () => {
         numberOfReplies: comment.numberOfReplies + 1,
       });
 
-      handleGetReplies(postId,comment.id);
+      handleGetReplies(postId, comment.id);
 
       // await addDoc(postRef, commentObject);
 
@@ -153,39 +153,71 @@ const usePostComment = () => {
     }
   };
 
-  const handleGetReplies = async(postId,commentId)=>{
-
-
-    try{
+  const handleGetReplies = async (postId, commentId) => {
+    try {
       const commentRepliesCollectionRef = collection(
         firestore,
-        "posts",         // Collection: posts
-        postId,           // Document ID: postId
-        "comments",       // Collection: comments
-        commentId,        // Document ID: commentId
-        "commentReplies"  // Collection: commentReplies
+        "posts", // Collection: posts
+        postId, // Document ID: postId
+        "comments", // Collection: comments
+        commentId, // Document ID: commentId
+        "commentReplies" // Collection: commentReplies
       );
       const q = query(commentRepliesCollectionRef);
       const querySnapshot = await getDocs(q);
-     const replies = [];
-     querySnapshot.forEach((doc) => {
-      replies.push({ ...doc.data(), id: doc.id });
-     });
-  
+      const replies = [];
+      querySnapshot.forEach((doc) => {
+        replies.push({ ...doc.data(), id: doc.id });
+      });
 
-     addReplyToComment(postId, commentId, replies)
+      addReplyToComment(postId, commentId, replies);
+    } catch (e) {
+      console.log(e);
     }
-    catch(e){
-     console.log(e)
+  };
+
+  const handleUpdateReply = async ({
+  
+    commentId,
+    reply,
+ 
+   
+  }) => {
+    if (isCommenting) return;
+    if (!authUser)
+      return showToast("Error", "You must be logged in to comment", "error");
+    setIsCommenting(true);
+
+    try {
+  
+      const postRef = doc(
+        firestore,
+        "posts",
+        reply.postId,
+        "comments",
+        commentId,
+        "commentReplies",
+        reply.id
+      );
+
+      await updateDoc(postRef, reply);
+      updateReplyLikes(reply,commentId)   
+    } catch (error) {
+      showToast("Error", error.message, "error");
+      console.log(error);
+      console.log("eeeeeeeeeeeeeeeeeeeeeeeee");
+    } finally {
+      setIsCommenting(false);
     }
-  }
+  };
 
   return {
     isCommenting,
     handlePostComment,
     handleUpdateComment,
     handleCommentReply,
-    handleGetReplies
+    handleGetReplies,
+    handleUpdateReply
   };
 };
 

@@ -109,13 +109,13 @@ const ProfilePost = ({ post, comments, userProfile }) => {
             <Flex>
               <AiFillHeart size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                7
+                {post.likes.length}
               </Text>
             </Flex>
             <Flex>
               <FaComment />
               <Text fontWeight={"bold"} ml={2}>
-                5
+                {comments.length}
               </Text>
             </Flex>
           </Flex>

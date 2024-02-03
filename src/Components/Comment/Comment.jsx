@@ -156,7 +156,7 @@ const Comment = ({ comment , replies }) => {
       </Flex>:null
       :null
     }
-    {      replies.replies.length<1?null:<Box>{replies.replies.map((reply , index)=><Box key={index}><Reply reply={reply}/></Box>)}</Box>
+    {      replies.replies.length<1?null:<Box>{replies.replies.map((reply , index)=><Box key={index}><Reply reply={reply} commentId={comment.id}/></Box>)}</Box>
 }
     </Box>
   </Box>

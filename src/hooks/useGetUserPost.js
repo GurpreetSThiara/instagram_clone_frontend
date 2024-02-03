@@ -17,8 +17,7 @@ const useGetUserPost = () => {
     try {
       const querySnapshot = await getDoc(doc(firestore, "posts", postId));
       if (querySnapshot.exists()) {
-        // setUserProfile(posts);
-        console.log("yyyyyyyyyyyyyyyyyyyyyyyyyy")
+   
         isSavedPostsFetching?  setSavedPostsList({post:querySnapshot.data(),comments:[]}):null;
       }
 

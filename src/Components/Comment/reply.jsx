@@ -8,7 +8,7 @@ import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import usePostStore from "../../store/postStore";
 
-const Reply = ({ reply  }) => {
+const Reply = ({ reply ,commentId  }) => {
   
     if(!reply){
         return (
@@ -24,7 +24,7 @@ const Reply = ({ reply  }) => {
     }
 
   const [like , setLike] = useState(false);
-  const { handleUpdateComment , handleGetReplies } = usePostComment();
+  const { handleUpdateComment , handleGetReplies ,handleUpdateReply } = usePostComment();
   const user = useAuthStore(s=>s.user);
   const setIsReplyingComment = usePostStore(s=>s.setIsReplyingComment);
   const setReplyingTo = usePostStore(s=>s.setReplyingTo);
@@ -45,7 +45,7 @@ const Reply = ({ reply  }) => {
         "likes":1,
         "likedBy": [user.uid],
     }
-
+    handleUpdateReply({reply:newComment ,commentId:commentId});
     // handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
 }
     else{
@@ -54,7 +54,7 @@ const Reply = ({ reply  }) => {
             "likes":reply.likes+1,
             "likedBy": [...(reply.likedBy || []), user.uid],
         }
-        //  handleUpdateComment(comment.createdBy,comment.postId,comment.id,newComment,comment);
+        handleUpdateReply({reply:newComment ,commentId:commentId});
 
      //   handleUpdateComment(comment.postId,newComment);
   
@@ -69,7 +69,7 @@ const Reply = ({ reply  }) => {
                     "likes":reply.likes-1,
                     "likedBy":  reply.likedBy.filter((id) => id !== user.uid),
                 } 
-                // handleUpdateComment(reply.createdBy,comment.postId,comment.id,newComment,comment);
+                handleUpdateReply({reply:newComment ,commentId:commentId});
 
             }
         }
@@ -150,7 +150,8 @@ const Reply = ({ reply  }) => {
         </Flex>
       </Box>
       <Box onClick={handleLikeComment}>
-        {like?<BsHeartFill color="red" />:<BsHeart size={10}/>}
+        {like?<BsHeartFill size={10}
+         color="red" />:<BsHeart size={10}/>}
       </Box>
     </Flex>
     {/* <Box pl={4}>
