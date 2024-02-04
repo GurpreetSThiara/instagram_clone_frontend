@@ -42,8 +42,8 @@ const FeedPosts = () => {
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && posts && posts.length!==0? posts.map((post)=>(
-      <FeedPost key={posts.id} post={post} />)):<>  <Container maxW={"container.sm"} textAlign={"center"}>
+      {!isLoading && posts && posts.length!==0? posts.map((item,index)=>(
+      <FeedPost key={index} post={item.post} comments={item.comments} />)):<>  <Container maxW={"container.sm"} textAlign={"center"}>
       <Box fontSize={"xl"} fontWeight={"bold"} mb={4}>
         Oops! It seems a bit lonely here...
       </Box>

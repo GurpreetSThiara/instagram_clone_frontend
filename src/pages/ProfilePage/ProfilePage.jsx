@@ -60,7 +60,7 @@ const ProfilePage = () => {
       >
         <ProfileTabs  visitingOwnProfile={user.uid === userProfile.uid} />
         <ProfilePosts userProfile={userProfile} />
-        <ProfileFeedPosts/>
+        <ProfileFeedPosts userProfile={userProfile}/>
        {user.uid === userProfile.uid && selectedTab === 'saved' && <ProfileSavedPosts/>} 
       </Flex>
     </Container>

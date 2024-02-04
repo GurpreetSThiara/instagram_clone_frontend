@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Avatar, Box, Button, Flex, Skeleton, SkeletonCircle, Text } from '@chakra-ui/react'
 import useFollowUser from '../../hooks/useFollowUser';
 import { Link } from 'react-router-dom';
@@ -12,17 +13,17 @@ const PostHeader = ({ post, creatorProfile }) => {
 
 	
 	const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(post.createdBy);
-	useEffect(()=>{
+	// useEffect(()=>{
 
-		// if(user.uid === creatorProfile.id){
-		// 	setShowFolllow(false);
-		// }else{
-		// 	if(user.following.includes(creatorProfile.uid)){
-		// 		setFollow('true');
-		// 	}
-		// }
+	// 	// if(user.uid === creatorProfile.id){
+	// 	// 	setShowFolllow(false);
+	// 	// }else{
+	// 	// 	if(user.following.includes(creatorProfile.uid)){
+	// 	// 		setFollow('true');
+	// 	// 	}
+	// 	// }
 	
-	},[]);
+	// },[]);
 
 	
 

@@ -1,7 +1,9 @@
 import { addDoc, collection, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
+import useAuthStore from "../store/authStore";
 
 const useNotifications = () => {
+  const user = useAuthStore(s=>s.user)
     const notifyLike =async ({likedByUserId,postId,postOwnerId}) =>{
           const notification = {
             "type":"like",
@@ -55,8 +57,21 @@ const useNotifications = () => {
         }
       };
 
+      const deleteNotification = async ({  notification }) => {
+        try {
+          // Assuming 'user' is the authenticated user and 'notification' is the notification object
+          const notificationRef = doc(firestore, 'users', user.uid, 'notifications', notification.id);
+      
+          // Delete the notification document
+          await deleteDoc(notificationRef);
+      
+          console.log('Notification deleted successfully!');
+        } catch (error) {
+          console.error('Error deleting notification:', error.message);
+        }
+      };
 
-  return {notifyLike , removeNotification , notifyComment}
+  return {notifyLike , removeNotification , notifyComment ,deleteNotification}
 }
 
 export default useNotifications

@@ -26,6 +26,7 @@ import { color } from "framer-motion";
 import useAuthStore from "../../../store/authStore";
 import useGetUserProfileById from "../../../hooks/useGetUserProfileById";
 import usePostStore from "../../../store/postStore";
+import PostModal from "../../PostModal/PostModal";
 
 const ProfilePost = ({ post, comments, userProfile }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -130,12 +131,14 @@ const ProfilePost = ({ post, comments, userProfile }) => {
         />
       </GridItem>
 
-      <Modal
+      <PostModal comments={comments} isOpen={isOpen} onClose={onClose} post={post} user={user} userProfile={userProfile} />
+
+      {/* <Modal
         isOpen={isOpen}
         onClose={onClose}
         isCentered={true}
-        size={{ base: "3xl", md: "3xl" }}
-        h={500}
+        size={{ base: "3xl", md: "4xl" }}
+   
       >
         <ModalOverlay
           bg="blackAlpha.300"
@@ -145,16 +148,18 @@ const ProfilePost = ({ post, comments, userProfile }) => {
           <ModalBody
             bg={"black"}
             p={0}
-            h={600}
+           
             pb={5}
             border={"1px solid"}
             borderColor={"whiteAlpha.300"}
           >
-            <Flex gap={4} w={"full"} mx={"auto"}>
-              <Box borderRadius={4} overflow={"hidden"} flex={1.5}>
-                <Image h={500} src={post.imageURL} alt="post" fit={"contain"} />
+            <Flex  mx={"auto"} alignItems={'center'}>
+              <Box borderRadius={4}   overflow={"hidden"}  >
+                <Image w={'auto'}  src={post.imageURL} alt="post" />
               </Box>
               <Flex
+               w={'full'}
+             
                 borderLeft={"1px solid"}
                 borderColor={"whiteAlpha.300"}
                 flex={1}
@@ -211,7 +216,7 @@ const ProfilePost = ({ post, comments, userProfile }) => {
             </Flex>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
       <Modal
         isOpen={isModelMenuOpen}

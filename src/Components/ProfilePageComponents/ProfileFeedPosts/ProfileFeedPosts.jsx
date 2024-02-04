@@ -6,14 +6,14 @@ import useGetUserPosts from "../../../hooks/useGetUserPosts";
 import usePostStore from "../../../store/postStore";
 
 
-const ProfileFeedPosts = () => {
+const ProfileFeedPosts = ({userProfile}) => {
   const selectedTab = useUserProfileStore(s=>s.selectedTab);
   const { isLoading } = useGetUserPosts();
   const posts = usePostStore(s=>s.posts);
   if(selectedTab!=="feed") return;
   return (
     <Box>
-      {!isLoading && posts && posts.map((item,index)=><ProfileFeedPost key={index} post={item.post}/>)}
+      {!isLoading && posts && posts.map((item,index)=><ProfileFeedPost key={index} post={item.post} userProfile={userProfile}/>)}
       
     </Box>
   )

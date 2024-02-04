@@ -73,7 +73,7 @@ const HomePage = () => {
             console.log(newNotification);
             console.log("nnnnnnnnnnnnnnnnnnnnnnnn");
 
-            addNotification(newNotification);
+            addNotification({...newNotification,id:change.doc.id});
           }
         });
       });

@@ -8,7 +8,7 @@ import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import usePostStore from "../../store/postStore";
 
-const Reply = ({ reply ,commentId  }) => {
+const Reply = ({ reply ,commentId ,comment }) => {
   
     if(!reply){
         return (
@@ -136,7 +136,8 @@ const Reply = ({ reply ,commentId  }) => {
               </Text>
             </Box>
             <Box backgroundColor={"transparent"}  cursor={'pointer'} onClick={()=>{
-                setComment(reply); 
+              console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+                setComment(comment); 
                 setReplyingTo('@'+userProfile.username);
                 setIsReplyingComment(true);
 

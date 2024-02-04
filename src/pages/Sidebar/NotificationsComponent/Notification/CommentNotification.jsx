@@ -12,10 +12,21 @@ import useGetUserProfileById from "../../../../hooks/useGetUserProfileById";
 import useGetUserPostById from "../../../../hooks/useGetUserPostById";
 import { CalcTime } from "./../../../../utils/CalcTime";
 import GoogleAuth from './../../../../Components/AuthenticationForm/GoogleAuth';
+import useNotifications from "../../../../hooks/useNotifications";
+import useNotificationStore from "../../../../store/notificationsStore";
 
 const CommentNotification = ({ notification }) => {
   const { userProfile } = useGetUserProfileById(notification.commentBy);
   const { isLoading, userPost } = useGetUserPostById(notification.postId);
+  const {deleteNotification} = useNotifications();
+  const deleteNotificationFromLocal = useNotificationStore(s=>s.deleteNotificationFromLocal)
+  if(!isLoading){
+    if(!userPost){
+      deleteNotification({notification:notification});
+      deleteNotificationFromLocal(notification);
+      
+    }
+  }
 
   if (!userProfile || !userPost) {
     return (
@@ -49,8 +60,8 @@ const CommentNotification = ({ notification }) => {
           </Text>
         </Flex>
       </Flex>
-      <Box boxSize={12}>
-        <Image src={userPost.imageURL} />
+      <Box h={12} w={12} overflow={'hidden'}>
+        <Image  src={userPost.imageURL} fit={'contain'} overflow={'hidden'}/>
       </Box>
     </Flex>
   );

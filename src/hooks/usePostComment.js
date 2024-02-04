@@ -8,6 +8,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   updateDoc,
 } from "firebase/firestore";
@@ -107,8 +108,7 @@ const usePostComment = () => {
     setIsCommenting(true);
 
     try {
-      console.log("iiiiiiiidddddddddd");
-      console.log(comment.id);
+   
       const reply = {
         repliedComment,
         createdAt: Date.now(),
@@ -129,8 +129,7 @@ const usePostComment = () => {
       const newCommentRef = await addDoc(commentRepliesCollectionRef, reply);
 
       const reply_res = { ...reply, id: newCommentRef.id };
-      console.log(reply_res);
-      console.log("replyresultttt");
+
 
       await updateDoc(commentRef, {
         ...comment,
@@ -163,8 +162,8 @@ const usePostComment = () => {
         commentId, // Document ID: commentId
         "commentReplies" // Collection: commentReplies
       );
-      const q = query(commentRepliesCollectionRef);
-      const querySnapshot = await getDocs(q);
+      const q = query(commentRepliesCollectionRef,  orderBy("createdAt", "asc"));
+      const querySnapshot = await getDocs(q );
       const replies = [];
       querySnapshot.forEach((doc) => {
         replies.push({ ...doc.data(), id: doc.id });

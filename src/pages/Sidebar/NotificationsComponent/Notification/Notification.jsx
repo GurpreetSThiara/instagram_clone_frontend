@@ -2,10 +2,21 @@ import { Avatar, Box, Flex, Image, Skeleton, SkeletonCircle, Spinner, Text } fro
 import useGetUserProfileById from "../../../../hooks/useGetUserProfileById"
 import useGetUserPostById from "../../../../hooks/useGetUserPostById";
 import { CalcTime } from './../../../../utils/CalcTime';
+import useNotifications from "../../../../hooks/useNotifications";
+import useNotificationStore from "../../../../store/notificationsStore";
 
 const LikeNotification = ({notification}) => {
+  const {deleteNotification} = useNotifications();
+  const deleteNotificationFromLocal = useNotificationStore(s=>s.deleteNotificationFromLocal)
     const {userProfile} = useGetUserProfileById(notification.likedBy);
     const  { isLoading, userPost } = useGetUserPostById(notification.postId);
+    if(!isLoading){
+      if(!userPost){
+        deleteNotification({notification:notification});
+        deleteNotificationFromLocal(notification);
+        
+      }
+    }
 
     
     if(!userProfile || !userPost ){
@@ -30,8 +41,8 @@ const LikeNotification = ({notification}) => {
 
       </Flex>
       </Flex>
-      <Box boxSize={12}>
-        <Image  src={userPost.imageURL}/>
+      <Box h={12} w={12} overflow={'hidden'}>
+        <Image  src={userPost.imageURL} fit={'contain'} overflow={'hidden'}/>
       </Box>
     </Flex>
   )

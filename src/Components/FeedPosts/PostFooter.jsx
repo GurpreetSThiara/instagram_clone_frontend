@@ -22,8 +22,9 @@ import usePostStore from "../../store/postStore";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { BiBookmark } from "react-icons/bi";
 import useSavedPost from "../../hooks/useSavedPost";
+import PostModal from "../PostModal/PostModal";
 
-const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
+const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comments }) => {
   const [reply, setReply] = useState(null);
 
 
@@ -60,11 +61,12 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   
     // getSavedPosts(authUser.uid,false);
     if (replyingTo) {
+      console.log("useeffffffffffffeeeeeeeeeeettttttttttttttt")
       setReply(replyingTo);
       commentRef.current.focus();
     }
 
-  }, []);
+  }, [replyingTo]);
 
   const handleSubmitComment = async () => {
     if(replyingTo){
@@ -93,7 +95,11 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
         <Box
           cursor={"pointer"}
           fontSize={18}
-          onClick={() => commentRef.current.focus()}
+          onClick={() =>{ 
+            if(isFromFeedPosts){
+                onOpen()
+            }else{
+            commentRef.current.focus()}}}
         >
           <CommentLogo />
         </Box>
@@ -177,6 +183,8 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
           </InputGroup>
         </Flex>
       )}
+
+      <PostModal comments={comments} isOpen={isOpen} onClose={onClose} post={post} user={authUser} userProfile={creatorProfile} />
     </Box>
   );
 };
