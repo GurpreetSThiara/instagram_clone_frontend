@@ -67,7 +67,7 @@ const ProfileUpperPart = ({
 		
    }
 	
-	},[]);
+	},[uid,user.following]);
 
   return (
     <VStack alignItems="flex-start" gap={2} flex={1}>
@@ -442,7 +442,8 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
       ) : (
         <>
           <Flex>
-            <ProfileImage />
+          <ProfileImage image={userProfile.profilePicUrl} />
+
             <ProfileUpperPart
               username={userProfile.username}
               vistingOwnProfile={vistingOwnProfile}

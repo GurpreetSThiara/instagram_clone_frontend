@@ -5,6 +5,12 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -23,8 +29,10 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 import { BiBookmark } from "react-icons/bi";
 import useSavedPost from "../../hooks/useSavedPost";
 import PostModal from "../PostModal/PostModal";
+import { GoChevronLeft } from "react-icons/go";
+import Comment from "../Comment/Comment";
 
-const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comments }) => {
+const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comments , isMobile }) => {
   const [reply, setReply] = useState(null);
 
 
@@ -36,6 +44,9 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { savePost, getSavedPosts, isLoading } = useSavedPost();
   const [isSaved , setIsSaved] = useState(false);
+  const [isCommentModalOpen ,setIsCommentModalOpen] = useState(false);
+  const onCommentModalOpen = () => setIsCommentModalOpen(true);
+  const onCommentModalClose = () => setIsCommentModalOpen(false);
   
 
   const replyingTo = usePostStore((s) => s.replyingTo); 
@@ -125,7 +136,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
         </Text>
       )}
 
-      {!isProfilePage && (
+      {(
         <>
           <Text fontSize="sm" fontWeight={700}>
             {creatorProfile?.username}{" "}
@@ -133,6 +144,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
               {post.caption}
             </Text>
           </Text>
+          {isMobile && comments?.length>0?<Box onClick={onCommentModalOpen}><Text fontSize={'12px'} color={"gray"}>View all {comments?.length} comments</Text> </Box>:null}
           {/* {post.comments.length > 0 && (
 						<Text fontSize='sm' color={"gray"} cursor={"pointer"} onClick={onOpen}>
 							View all {post.comments.length} comments
@@ -185,6 +197,76 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
       )}
 
       <PostModal comments={comments} isOpen={isOpen} onClose={onClose} post={post} user={authUser} userProfile={creatorProfile} />
+      
+      <Modal isOpen={isCommentModalOpen} onClose={onCommentModalClose} size={'full'}>
+        <ModalOverlay />
+        <ModalContent backgroundColor={'black'}>
+          <ModalHeader
+        h={'24px'}
+             backgroundColor={'black'}
+              alignItems={"center"}
+              display={"flex"}
+              justifyContent={"space-between"}
+              borderBottom={"1px solid #363636"}
+            >
+              <Box onClick={onClose}>
+                <GoChevronLeft  />
+              </Box>
+              <Text alignSelf={"center"}>Post</Text>
+              <Box></Box>
+            </ModalHeader>
+     
+          <ModalBody>
+          {comments?.map((item , index)=>{
+            
+            return <Box key={index}>
+              <Comment comment={item.comment} replies={item}/>
+            </Box>
+          })}
+          </ModalBody>
+
+          <ModalFooter>
+          <Flex
+          alignItems={"center"}
+          gap={2}
+          justifyContent={"space-between"}
+          w={"full"}
+        >
+          <InputGroup>
+            <Input
+              variant={"flushed"}
+              placeholder={"Add a comment..."}
+              fontSize={14}
+              onChange={(e) => {
+                if (reply) {
+                  setReply(null);
+                  setComment(e.target.value);
+                } else {
+                  setComment(e.target.value);
+                }
+              }}
+              value={reply ? reply + " " + comment : comment}
+              ref={commentRef}
+            />
+            <InputRightElement>
+              <Button
+                fontSize={14}
+                color={"blue.500"}
+                fontWeight={600}
+                cursor={"pointer"}
+                _hover={{ color: "white" }}
+                bg={"transparent"}
+                onClick={handleSubmitComment}
+                isLoading={isCommenting}
+              >
+                Post
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

@@ -31,9 +31,11 @@ const PostHeader = ({ post, creatorProfile }) => {
 		<Flex justifyContent={"space-between"} alignItems={"center"} w={"full"} my={2}>
 			<Flex alignItems={"center"} gap={2}>
 				{creatorProfile ? (
-					<Link to={`/${creatorProfile.username}`}>
+					<Box>
+						<Link to={`/${creatorProfile.username}`}>
 						<Avatar src={creatorProfile.profilePicUrl} alt='user profile pic' size={"sm"} />
 					</Link>
+					</Box>
 				) : (
 					<SkeletonCircle size='10' />
 				)}

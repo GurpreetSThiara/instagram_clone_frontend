@@ -217,7 +217,7 @@ const Sidebar = () => {
       direction={"row"}
       gap={5}
       cursor={"pointer"}
-      justifyContent={"space-between"}
+      justifyContent={"space-around"}
       backgroundColor={"black"}
     >
      <Box
