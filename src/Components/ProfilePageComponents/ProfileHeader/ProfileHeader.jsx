@@ -54,20 +54,7 @@ const ProfileUpperPart = ({
   uid,
 }) => {
   const { isFollowing, handleFollowUser, isUpdating } = useFollowUser(uid);
-  const user = useAuthStore(s=>s.user);
-	const[follow,setFollow]=useState(false);
-
-
-	
-	
-	useEffect(()=>{
-
-    if(user.following.includes(uid)){
-      setFollow('true');
-		
-   }
-	
-	},[uid,user.following]);
+  const user = useAuthStore((s) => s.user);
 
   return (
     <VStack alignItems="flex-start" gap={2} flex={1}>
@@ -110,7 +97,7 @@ const ProfileUpperPart = ({
               }}
               isLoading={isUpdating}
             >
-              {follow ? "Unfollow" : "Follow"}
+              {user.following.includes(uid) ? "Unfollow" : "Follow"}
             </Button>
           </Flex>
         )}
@@ -285,7 +272,7 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
               borderBottom={"1px solid #363636"}
             >
               <Box onClick={onFollowersModelMenuClose}>
-                <GoChevronLeft  />
+                <GoChevronLeft />
               </Box>
               <Text alignSelf={"center"}>Folllowers</Text>
               <Box></Box>
@@ -352,8 +339,8 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
               justifyContent={"space-between"}
               borderBottom={"1px solid #363636"}
             >
-                 <Box onClick={onFollowingModalMenuClose}>
-                <GoChevronLeft  />
+              <Box onClick={onFollowingModalMenuClose}>
+                <GoChevronLeft />
               </Box>
               <Text alignSelf={"center"} fontSize={17}>
                 Following
@@ -442,7 +429,7 @@ const ProfileHeader = ({ username, numberOfPosts, followers, following }) => {
       ) : (
         <>
           <Flex>
-          <ProfileImage image={userProfile.profilePicUrl} />
+            <ProfileImage image={userProfile.profilePicUrl} />
 
             <ProfileUpperPart
               username={userProfile.username}

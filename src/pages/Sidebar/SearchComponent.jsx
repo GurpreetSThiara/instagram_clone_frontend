@@ -44,6 +44,7 @@ const SearchComponent = () => {
             handleSearchQuery(e.target.value);
             console.log(e.target.value);
           }}
+          
         />
         <InputRightElement>
           {/*      

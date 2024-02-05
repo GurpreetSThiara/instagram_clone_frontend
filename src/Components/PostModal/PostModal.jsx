@@ -5,10 +5,17 @@ import PostFooter from "../FeedPosts/PostFooter"
 import PostHeader from "../FeedPosts/PostHeader"
 import { useEffect, useState } from "react"
 import { GoChevronLeft } from "react-icons/go"
+import PostDetailsModal from "./PostDetailsModal"
 
 
 const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
+    const [isModelMenuOpen, setIsModelMenuOpen] = useState(false);
+    
+  const onModelMenuOpen = () => setIsModelMenuOpen(true);
+  const onModelMenuClose = () => setIsModelMenuOpen(false);
+
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
 
 
     useEffect(() => {
@@ -102,6 +109,7 @@ const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
                       size={20}
                       cursor={"pointer"}
                       _hover={{ color: "#A8A8A8" }}
+                      onClick={onModelMenuOpen}
                     />
                   </Box>
                 </Flex>
@@ -134,6 +142,8 @@ const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <PostDetailsModal isModelMenuOpen={isModelMenuOpen} onModelMenuClose={onModelMenuClose} post={post} user={user}/>
       
     </Box>
   )
