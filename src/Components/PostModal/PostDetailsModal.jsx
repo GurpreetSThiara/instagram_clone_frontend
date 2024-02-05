@@ -1,5 +1,5 @@
 import { Box, Button, Modal, ModalBody, ModalContent } from '@chakra-ui/react'
-import EditPostModal from './EditPostModal';
+import EditPostModal from './EditPostModal/EditPostModal';
 import EditPost from './PostDeialsModalItems/EditPost';
 
 const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {

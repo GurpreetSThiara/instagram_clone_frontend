@@ -1,5 +1,5 @@
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
-import EditPostModal from '../EditPostModal';
+import EditPostModal from '../EditPostModal/EditPostModal';
 
 const EditPost = ({post , user}) => {
     const {isOpen , onOpen , onClose} = useDisclosure();
