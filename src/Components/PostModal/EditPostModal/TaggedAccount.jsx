@@ -35,7 +35,7 @@ const TaggedAccount = ({userId}) => {
       </Flex>
       <Box
         onClick={() => {
-            removeTag(userId);
+            removeTag(userProfile);
         }}
       >
         <BsXLg />

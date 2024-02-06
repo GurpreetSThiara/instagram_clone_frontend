@@ -9,11 +9,13 @@ const LikeNotification = ({notification}) => {
   const {deleteNotification} = useNotifications();
   const deleteNotificationFromLocal = useNotificationStore(s=>s.deleteNotificationFromLocal)
     const {userProfile} = useGetUserProfileById(notification.likedBy);
-    const  { isLoading, userPost } = useGetUserPostById(notification.postId);
+    const  { isLoading, userPost, isPostExist } = useGetUserPostById(notification.postId);
     if(!isLoading){
       if(!userPost){
-        deleteNotification({notification:notification});
-        deleteNotificationFromLocal(notification);
+        if(isPostExist){
+          deleteNotification({notification:notification});
+          deleteNotificationFromLocal(notification);
+          }
         
       }
     }

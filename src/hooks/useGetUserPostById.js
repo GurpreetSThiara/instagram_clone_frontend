@@ -8,6 +8,7 @@ const useGetUserPostById = (postId) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userPost, setUserPost] = useState(null);
   const setSavedPostsList = usePostStore((s) => s.setSavedPostsList);
+  const [isPostExist , setIsPostExist ] = useState(true);
 
   const showToast = useShowToast();
 
@@ -17,6 +18,8 @@ useEffect(()=>{
         setUserPost(null);
         try {
           const querySnapshot = await getDoc(doc(firestore, "posts", postId));
+          setIsPostExist(querySnapshot.exists());
+          
           if (querySnapshot.exists()) {
             setUserPost(querySnapshot.data());
             // setUserProfile(posts);
@@ -34,7 +37,7 @@ useEffect(()=>{
       getUserPost();
 },[])
 
-  return { isLoading, userPost };
+  return { isLoading, userPost, isPostExist };
 };
 
 export default useGetUserPostById;

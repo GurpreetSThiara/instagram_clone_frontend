@@ -17,13 +17,15 @@ import useNotificationStore from "../../../../store/notificationsStore";
 
 const CommentNotification = ({ notification }) => {
   const { userProfile } = useGetUserProfileById(notification.commentBy);
-  const { isLoading, userPost } = useGetUserPostById(notification.postId);
+  const { isLoading, userPost ,isPostExist } = useGetUserPostById(notification.postId);
   const {deleteNotification} = useNotifications();
   const deleteNotificationFromLocal = useNotificationStore(s=>s.deleteNotificationFromLocal)
   if(!isLoading){
     if(!userPost){
+      if(isPostExist){
       deleteNotification({notification:notification});
       deleteNotificationFromLocal(notification);
+      }
       
     }
   }

@@ -7,13 +7,27 @@ const usePostStore = create((set) => ({
   isReplyingComment: false,
   replyingTo: null,
   comment: null,
-
+  updateCaption:(post)=>set((state)=>(
+    {
+      posts:state.posts.map((item)=>{
+        if(item.post.id === post.id){
+          console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccc")
+          console.log(post.caption)
+        return{post:post,comments:item.comments} }
+        console.log("notchanged")
+        console.log(post)
+        console.log(item)
+     
+        return item;
+      })
+    }
+  )),
   setIsReplyingComment: (isReplyingComment) => set({ isReplyingComment }),
   setReplyingTo: (replyingTo) => set({ replyingTo }),
   setComment: (comment) => set({ comment }),
   createPost: (post) => set((state) => ({ posts: [post, ...state.posts] })),
   deletePost: (id) =>
-    set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
+    set((state) => ({ posts: state.posts.filter((post) => post.post.id !== id) })),
   setPosts: (posts) => set({ posts }),
   setSavedPosts: (savedPosts) =>
     set((state) => ({

@@ -57,6 +57,19 @@ const useNotifications = () => {
         }
       };
 
+      const notifyTag = async ({postId,postOwnerId,userId})=>{
+        const notification = {
+          "type":"tag",
+           "taggedBy":postOwnerId,
+           "postId":postId,
+           
+
+           createdAt: Date.now(),
+        
+        }
+      const notificationRef =   await addDoc(collection(firestore, 'users', userId, 'notifications'),notification );
+      }
+
       const deleteNotification = async ({  notification }) => {
         try {
           // Assuming 'user' is the authenticated user and 'notification' is the notification object
@@ -71,7 +84,7 @@ const useNotifications = () => {
         }
       };
 
-  return {notifyLike , removeNotification , notifyComment ,deleteNotification}
+  return {notifyLike , removeNotification , notifyComment ,deleteNotification , notifyTag}
 }
 
 export default useNotifications

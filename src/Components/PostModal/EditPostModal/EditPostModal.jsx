@@ -29,6 +29,7 @@ import { BsX, BsXLg } from "react-icons/bs";
 import useUpdatePost from "../../../hooks/useUpdatePost";
 import TaggedAccount from "./TaggedAccount";
 import useEditpostStore from "../../../store/EditPostStore";
+import usePostStore from "../../../store/postStore";
 
 const EditPostModal = ({ isOpen, onClose, post, user }) => {
   const [isTagMenuOpened, setIsTagMenuOpened] = useState(false);
@@ -43,6 +44,10 @@ const EditPostModal = ({ isOpen, onClose, post, user }) => {
   const addTag = useEditpostStore(s=>s.addTag);
   const setTags = useEditpostStore(s=>s.setTags);
   const tags = useEditpostStore(s=>s.tags);
+  const newTags = useEditpostStore(s=>s.newTags);
+  const removedTags = useEditpostStore(s=>s.removedTags);
+  const updateCaption = usePostStore(s=>s.updateCaption);
+  //todo caption
 
 
   const handleAddTag = () => {
@@ -54,37 +59,46 @@ const EditPostModal = ({ isOpen, onClose, post, user }) => {
     }
   };
   const handlePostUpdate = () => {
-    const taggedPeople = [];
-    tagged.map((item)=>{
-        taggedPeople.push(item.uid)
-    })
+    
     const updatedPost = {
       ...post,
-      taggedPeople: taggedPeople,
+      taggedPeople: tags,
       caption: caption,
     };
     if (post.taggedPeople) {
-      const newTags = tagged.filter(
-        (item) => !post.taggedPeople.includes(item)
-      );
-      const tagsToBeRemoved = post.taggedPeople.filter(
-        (item) => !tagged.includes(item)
-      );
+      // const newTags = tagged.filter(
+      //   (item) => !post.taggedPeople.includes(item.uid)
+      // );
+      // const tagsToBeR = post.taggedPeople.filter(
+      //   (item) => !tags.includes(item)
+      // );
+      // let tagsToBeRemoved = [];
+      // for (let i of tagged){
+      //   if(tagsToBeR.includes(i.uid)){
+      //     tagsToBeRemoved.push(i);
+      //   }else{
+      //     con
+      //   }
+      // }
+      
+   
       updatePost({
         post: updatedPost,
         newTags: newTags,
-        tagsToBeRemoved: tagsToBeRemoved,
+        tagsToBeRemoved: removedTags,
       });
+      updateCaption(updatedPost);
       onClose();
     } else {
       updatePost({ post: updatedPost, newTags: tagged, tagsToBeRemoved: [] });
+      updateCaption(updatedPost);
       onClose();
     }
   };
 
   useEffect(() => {
     if (post.taggedPeople) {
-      setTagged(post.taggedPeople);
+      // setTagged(post.taggedPeople);
       setTags(post.taggedPeople);
     }
   }, [post]);
@@ -192,6 +206,7 @@ const EditPostModal = ({ isOpen, onClose, post, user }) => {
                             _hover={{ backgroundColor: "#121212" }}
                             onClick={() => {
                               setTagged([...tagged, item]);
+                              addTag(item);
 
                               setAddTagTapped(false);
                             }}

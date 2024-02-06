@@ -4,6 +4,7 @@ import useSearchUsers from '../../../hooks/useSearchUsers';
 import useNotificationStore from '../../../store/notificationsStore';
 import LikeNotification from './Notification/Notification';
 import CommentNotification from './Notification/CommentNotification';
+import TagNotification from './Notification/TagNotification';
 
 const NotificationsComponent = () => {
     const { isLoading, searchUsers } = useSearchUsers();
@@ -38,6 +39,7 @@ const NotificationsComponent = () => {
             return <Box key={index}>
               {notification.type === "like" && <LikeNotification notification={notification}/>}
               {notification.type === "comment" && <CommentNotification notification={notification}/>}
+              {notification.type === "tag" && <TagNotification notification={notification}/>}
                 
             </Box>
         })}

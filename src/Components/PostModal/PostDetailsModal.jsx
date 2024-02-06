@@ -1,20 +1,12 @@
 import { Box, Button, Modal, ModalBody, ModalContent } from '@chakra-ui/react'
 import EditPostModal from './EditPostModal/EditPostModal';
 import EditPost from './PostDeialsModalItems/EditPost';
+import DeletePost from './PostDeialsModalItems/DeletePost';
 
 const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
     
   const modalMenuItems = [
-    {
-      title: "Delete",
-      color: "red",
-      onClick: () => {},
-    },
-    {
-      title: "Edit",
-      color: "#F5F5F5",
-      onClick: () => {},
-    },
+
     {
       title: "Hide likes count to others",
       color: "#F5F5F5",
@@ -59,7 +51,9 @@ const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
         <ModalContent borderRadius={20} >
           <ModalBody bg={"#262626"} borderRadius={20} overflow={"hidden"}>
             <Box m={0} p={0}>
-              <EditPost post={post} user={user}/>
+            {post.createdBy === user.uid &&   <DeletePost post={post} user={user}/>} 
+
+            {post.createdBy === user.uid &&   <EditPost post={post} user={user}/>} 
               {modalMenuItems.map((item, index) => (
                 <Box
                   key={index}
@@ -67,7 +61,7 @@ const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
                   justifyContent={"center"}
                   display={"flex"}
                   p={0}
-                  borderBottom={'1px Solid #212121'}
+                  borderBottom={'1px Solid #363636'}
                   cursor={"pointer"}
                 >
                   <Button
