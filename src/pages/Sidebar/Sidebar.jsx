@@ -182,8 +182,10 @@ const Sidebar = () => {
                 <Profile shrinkedSideBar={shrinkedSideBar} />
               </Box>
 
-              <Flex
+              <Box
+              display={'flex'}
                 onClick={handleLogOut}
+                
                 alignItems={"center"}
                 gap={4}
                 _hover={{ bd: "whiteAlpha.400" }}
@@ -191,6 +193,7 @@ const Sidebar = () => {
                 p={2}
                 w={{ base: 10, md: "full" }}
                 justifyContent={{ base: "center", md: "flex-start" }}
+                isLoading={isLoggingOut}
               >
                 <BiLogOut />
                 {shrinkedSideBar ? null : (
@@ -202,7 +205,7 @@ const Sidebar = () => {
                     Logout
                   </Button>
                 )}
-              </Flex>
+              </Box>
             </Flex>
           }
         </Flex>

@@ -7,6 +7,14 @@ const usePostStore = create((set) => ({
   isReplyingComment: false,
   replyingTo: null,
   comment: null,
+  updatePost:(post) => set((state)=>({
+    posts:state.posts.map((item)=>{
+      if(item.post.id === post.id){
+        return {post:post,comments:item.comments}
+      }
+      return item;
+    })
+  })),
   updateCaption:(post)=>set((state)=>(
     {
       posts:state.posts.map((item)=>{

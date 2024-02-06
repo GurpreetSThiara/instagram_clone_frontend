@@ -48,7 +48,7 @@ const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
         <ModalContent p={0}
            backgroundColor={'black'}
         >
-        <ModalHeader
+        {/* <ModalHeader
         h={'44px'}
              backgroundColor={'black'}
               alignItems={"center"}
@@ -61,7 +61,7 @@ const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
               </Box>
               <Text alignSelf={"center"}>Post</Text>
               <Box></Box>
-            </ModalHeader>
+            </ModalHeader> */}
           <ModalBody
             bg={"black"}
             p={{base:4,md:0}}
@@ -69,7 +69,7 @@ const PostModal = ({post , comments ,userProfile , isOpen ,onClose , user}) => {
            
             pb={5}
             border={{base:'none',md:"1px solid"}}
-            borderColor={"whiteAlpha.300"}
+            borderColor={"gray"}
           >
            {isMobile && <Box ><PostHeader display={{base:'flex',md:'none',lg:'none'}} creatorProfile={userProfile} post={post} /></Box> } 
             <Flex  mx={"auto"} alignItems={'center'}>

@@ -67,6 +67,7 @@ const DeletePostModal = ({ isOpen, onClose , post }) => {
             display={"flex"}
             p={0}
             cursor={"pointer"}
+            onClick={onClose}
           >
             <Button
               m={0}

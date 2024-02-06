@@ -1,32 +1,31 @@
 import { Box, Button, Modal, ModalBody, ModalContent } from '@chakra-ui/react'
 import EditPostModal from './EditPostModal/EditPostModal';
-import EditPost from './PostDeialsModalItems/EditPost';
-import DeletePost from './PostDeialsModalItems/DeletePost';
+import EditPost from './PostDetialsModalItems/EditPost';
+import DeletePost from './PostDetialsModalItems/DeletePost';
+import HideLikesCount from './PostDetialsModalItems/HideLikesCount';
+import TurnCommentsOnOrOff from './PostDetialsModalItems/TurnCommentsOnOrOff';
 
 const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
     
   const modalMenuItems = [
 
-    {
-      title: "Hide likes count to others",
-      color: "#F5F5F5",
-      onClick: () => {},
-    },
-    {
-      title: "Turn off commenting",
-      color: "#F5F5F5",
-      onClick: () => {},
-    },
-    {
-      title: "Share to...",
-      color: "#F5F5F5",
-      onClick: () => {},
-    },
-    {
-      title: "Copy link",
-      color: "#F5F5F5",
-      onClick: () => {},
-    },
+   
+    
+    // {
+    //   title: "Turn off commenting",
+    //   color: "#F5F5F5",
+    //   onClick: () => {},
+    // },
+    // {
+    //   title: "Share to...",
+    //   color: "#F5F5F5",
+    //   onClick: () => {},
+    // },
+    // {
+    //   title: "Copy link",
+    //   color: "#F5F5F5",
+    //   onClick: () => {},
+    // },
     {
       title: "About this account",
       color: "#F5F5F5",
@@ -35,7 +34,7 @@ const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
     {
       title: "cancel",
       color: "#F5F5F5",
-      onClick: () => {},
+      onClick:()=>{onModelMenuClose()},
     },
   ];
   return (
@@ -49,11 +48,17 @@ const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
         overflow={"hidden"}
       >
         <ModalContent borderRadius={20} >
-          <ModalBody bg={"#262626"} borderRadius={20} overflow={"hidden"}>
+          <ModalBody p={0} bg={"#262626"} borderRadius={20} overflow={"hidden"} py={2}>
             <Box m={0} p={0}>
             {post.createdBy === user.uid &&   <DeletePost post={post} user={user}/>} 
 
             {post.createdBy === user.uid &&   <EditPost post={post} user={user}/>} 
+            {post.createdBy === user.uid &&   <Box onClick={onModelMenuClose}>
+              <HideLikesCount post={post} user={user}/>
+              </Box>} 
+              {post.createdBy === user.uid &&   <Box onClick={onModelMenuClose}>
+              <TurnCommentsOnOrOff post={post} user={user}/>
+              </Box>}
               {modalMenuItems.map((item, index) => (
                 <Box
                   key={index}
@@ -63,6 +68,7 @@ const PostDetailsModal = ({isModelMenuOpen ,onModelMenuClose , post,user}) => {
                   p={0}
                   borderBottom={'1px Solid #363636'}
                   cursor={"pointer"}
+                  onClick={item.onClick}
                 >
                   <Button
                   m={0}

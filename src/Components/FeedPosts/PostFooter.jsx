@@ -64,7 +64,6 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
   useEffect(()=>{
     if(savedPosts.includes(post.id)){
       isSaved(true);
-      console.log('fffffffffffffffffffffffffffffffffffffffffffff')
     }
   },[])
 
@@ -72,7 +71,6 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
   
     // getSavedPosts(authUser.uid,false);
     if (replyingTo) {
-      console.log("useeffffffffffffeeeeeeeeeeettttttttttttttt")
       setReply(replyingTo);
       commentRef.current.focus();
     }
@@ -103,7 +101,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
           {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
         </Box>
 
-        <Box
+      {!post.turnOffCommenting &&   <Box
           cursor={"pointer"}
           fontSize={18}
           onClick={() =>{ 
@@ -113,7 +111,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
             commentRef.current.focus()}}}
         >
           <CommentLogo />
-        </Box>
+        </Box> }
         </Flex>
         
         <Box
@@ -127,7 +125,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
         </Box>
       </Flex>
       <Text fontWeight={600} fontSize={"sm"}>
-        {likes} likes
+        {post.hideLikesCount?'': likes} likes
       </Text>
 
       {isProfilePage && (
@@ -162,7 +160,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
           justifyContent={"space-between"}
           w={"full"}
         >
-          <InputGroup>
+        {!post.turnOffCommenting &&     <InputGroup>
             <Input
               variant={"flushed"}
               placeholder={"Add a comment..."}
@@ -192,7 +190,8 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
                 Post
               </Button>
             </InputRightElement>
-          </InputGroup>
+          </InputGroup>}
+         {post.turnOffCommenting && <Text fontSize={'md'} color={'gray'}>comments on this post are limited</Text> }
         </Flex>
       )}
 
@@ -232,7 +231,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
           justifyContent={"space-between"}
           w={"full"}
         >
-          <InputGroup>
+         <InputGroup>
             <Input
               variant={"flushed"}
               placeholder={"Add a comment..."}
@@ -263,6 +262,7 @@ const PostFooter = ({ post, isProfilePage, creatorProfile ,isFromFeedPosts ,comm
               </Button>
             </InputRightElement>
           </InputGroup>
+    
         </Flex>
           </ModalFooter>
         </ModalContent>
