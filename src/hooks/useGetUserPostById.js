@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useShowToast from "./useShowToast";
 import { doc, getDoc, getDocs, query } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
 import usePostStore from "../store/postStore";
+import { firestore } from "../Firebase/Firebase";
 
 const useGetUserPostById = (postId) => {
   const [isLoading, setIsLoading] = useState(true);

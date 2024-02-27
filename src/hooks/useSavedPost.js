@@ -1,8 +1,9 @@
 import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
+
 import usePostStore from "../store/postStore";
 import { useState } from "react";
 import useGetUserPost from "./useGetUserPost";
+import { firestore } from "../Firebase/Firebase";
 
 
 const useSavedPost =  () => {

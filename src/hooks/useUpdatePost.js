@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
 import useNotifications from "./useNotifications";
+import { firestore } from "../Firebase/Firebase";
 
 const useUpdatePost = () => {
   const { notifyTag } = useNotifications();

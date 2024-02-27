@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
 import useAuthStore from "../store/authStore";
+import { firestore } from "../Firebase/Firebase";
 
 const useNotifications = () => {
   const user = useAuthStore(s=>s.user)
