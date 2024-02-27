@@ -31,7 +31,7 @@ import { BsHeart } from "react-icons/bs";
 import useAuthStore from "../store/authStore";
 import useNotificationStore from "../store/notificationsStore";
 import { collection, onSnapshot } from "firebase/firestore";
-import { firestore } from "../firebase/firebase";
+import { firestore } from "../Firebase/Firebase";
 
 const HomePage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
